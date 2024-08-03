@@ -10,9 +10,9 @@
     <body>
 
         <header id="toph">
-            <img src="arrow.png" class="logobutton" draggable="false" onclick="hidemenu();" id="logoarr">
-            <img src="logo.png" id="top" height="7vh" draggable="false">
-            <img src="darkmode.png" class="logobutton" draggable="false" onclick="tdarkmode();">
+            <img src="images/arrow.png" class="logobutton" draggable="false" onclick="hidemenu();" id="logoarr">
+            <img src="images/logo.png" id="top" height="7vh" draggable="false">
+            <img src="images/darkmode.png" class="logobutton" draggable="false" onclick="tdarkmode();">
         </header>
         <nav id="navmain">
             <span class="links"><a id="linkdaily" href="daily.html" class="aNav">DAILY</a></span>
@@ -22,7 +22,7 @@
         </nav>
 
         <main align="center">
-            <video id="bgvideo" src="background.mp4" autoplay loop muted poster="backgroundstill.png"></video>
+            <video id="bgvideo" src="images/background.mp4" autoplay loop muted poster="backgroundstill.png"></video>
             <div style="padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh;" id="instructions">
                 brawler guessing game!<br>
                 enter your guess here:
@@ -92,7 +92,7 @@
                 <div onclick="kbPress('-')" class="keyboardKey">-</div>
                 <div onclick="kbPress('8')" class="keyboardKey">8</div>
                 <div onclick="kbPress(' ')" class="keyboardKey" id="keyboardSpace">_</div>
-                <div onclick="kbBack()" class="keyboardKey" id="keyboardBack"><img src="backspace.png" style="width: 6vw; height: auto;"></div>
+                <div onclick="kbBack()" class="keyboardKey" id="keyboardBack"><img src="images/backspace.png" style="width: 6vw; height: auto;"></div>
                 <div onclick="guess()" class="keyboardKey" id="keyboardGuess">></div>
             </div>
 
@@ -103,12 +103,12 @@
 
                     <img id="endscreen-img" src="" draggable="false" style="height: 16.6vh; width: auto; margin-top: 10px;"><br>
                     <div id="endscreen-text">the brawler was BIBI!<br>congratulations!</div><br>
-                    <img id="streak-img" src="streakanim.gif"><span id="streak1">0 </span><span id="streak2">in a row!</span><br>
+                    <img id="streak-img" src="images/streakanim.gif"><span id="streak1">0 </span><span id="streak2">in a row!</span><br>
                     <span id="streak3">best streak: </span><span id="streak4">2</span><br><br>
                     <button onclick="go_back()" id="back"><b><</b></button><button onclick="location.reload()" id="play-again">PLAY AGAIN</button><br><br>
 
-                    <a href="https://youtube.com/@Krias" target="_blank"><img src="youtube.png">/ @Krias</a> <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a><br>
-                    <a href="https://twitter.com/@KriasBS" target="_blank"><img src="twitter.png">/ @KriasBS</a>
+                    <a href="https://youtube.com/@Krias" target="_blank"><img src="images/youtube.png">/ @Krias</a> <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a><br>
+                    <a href="https://twitter.com/@KriasBS" target="_blank"><img src="images/twitter.png">/ @KriasBS</a>
 
                 </center>
             </div>
@@ -382,7 +382,7 @@
                 shadow.style.display = "inherit";
                 endscreen.style.display = "inherit";
 
-                document.getElementById("endscreen-img").src = brawlers[m_brawler].name + ".png";
+                document.getElementById("endscreen-img").src = "images/" + brawlers[m_brawler].name + ".png";
 
                 animateCSS(shadow, "fadeIn", "2s");
                 animateCSS(endscreen, "fadeInDown", "2s");
@@ -433,15 +433,9 @@
                 if(guess_text == "larry" || guess_text == "lawrie" || guess_text == "larry lawrie" || guess_text == "larry&lawrie")
                     guess_text = "larry & lawrie";
 
-                var brawler_nr = 0;
-                while(guess_text != brawlers[brawler_nr].name){
-                    brawler_nr++;
-                    if(brawler_nr == 1000)
-                        break;
-                }
-                console.log(brawler_nr);
+                var brawler_nr = brawlers.indexOf(guess_text);
                 
-                if(brawler_nr != 1000){
+                if(brawler_nr != -1){
                     number_of_guesses++;
 
                     var number = document.getElementById("rem_numb");
@@ -454,7 +448,7 @@
                     var row = main_table.insertRow(1);
                     var cell = row.insertCell(0);
                     cell.className = "imageCell"; cell.align = "center";
-                    cell.innerHTML = "<img src='" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
+                    cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
                     animateCSS(cell, "flipInX", "0s");
 
     /*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
@@ -561,7 +555,7 @@
                 for(var i=0; i<=brawlers.length-1; i++){
                     if(brawlers[i].name.toLowerCase().includes(input.value.toLowerCase())){
                         var bNameFix = '"'+brawlers[i].name+'"';
-                        sList.innerHTML += "<img src='"+ brawlers[i].name +".png' class='sBrawler' onclick='autocomplete("+ bNameFix +")'>";
+                        sList.innerHTML += "<img src='images/"+ brawlers[i].name +".png' class='sBrawler' onclick='autocomplete("+ bNameFix +")'>";
                     }
                 }
             }

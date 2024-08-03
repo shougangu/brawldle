@@ -462,15 +462,9 @@
                 if(guess_text == "larry" || guess_text == "lawrie" || guess_text == "larry lawrie" || guess_text == "larry&lawrie")
                     guess_text = "larry & lawrie";
 
-                var brawler_nr = 0;
-                while(guess_text != brawlers[brawler_nr].name){
-                    brawler_nr++;
-                    if(brawler_nr == 1000)
-                        break;
-                }
-                console.log(brawler_nr);
+                var brawler_nr = brawlers.indexOf(guess_text);
                 
-                if(brawler_nr != 1000){
+                if(brawler_nr != -1){
                     if(number_of_guesses == 0){
                         tinterval = setInterval(timer, 1000);
                     }
