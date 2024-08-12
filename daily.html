@@ -30,7 +30,7 @@
             </div>
 
             <input list="brawlers_list" type="text" id="input" style="margin-bottom: 2vh;">
-            <button onclick="guess()" id="guessbutton">></button>
+            <button id="guessbutton">></button>
 
             <div style="padding-bottom: 0.9vh; font-size: 3vh;" id="rem">
                 guesses remaining: <span id="rem_numb">6</span>
@@ -94,7 +94,7 @@
                 <div onclick="kbPress('8')" class="keyboardKey">8</div>
                 <div onclick="kbPress(' ')" class="keyboardKey" id="keyboardSpace">_</div>
                 <div onclick="kbBack()" class="keyboardKey" id="keyboardBack"><img src="images/backspace.png" style="width: 6vw; height: auto;"></div>
-                <div onclick="guess()" class="keyboardKey" id="keyboardGuess">></div>
+                <div class="keyboardKey" id="keyboardGuess">></div>
             </div>
 
             <div style="position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.3); top: 0px;" id="shadow" class="endscreen"> </div>
@@ -108,7 +108,7 @@
                     <img id="streak-img" src="images/streakanim.gif"><span id="streak1">0 </span><span id="streak2">days in a row!</span><br>
                     <span id="streak3">best streak: </span><span id="streak4">2</span><br><br>
 
-                    <button onclick="go_back()" id="play-again"><b>GO BACK</b></button><br><br>
+                    <button onclick="go_back()" id="play-again"><<b>GO BACK</b></button><br><br>
 
                     <a href="https://youtube.com/@Krias" target="_blank"><img src="images/youtube.png">/ @Krias</a> <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a><br>
                     <a href="https://twitter.com/@KriasBS" target="_blank"><img src="images/twitter.png">/ @KriasBS</a>
@@ -120,150 +120,7 @@
         <script type = "text/javascript" src="data.js"></script>
         <script type = "text/javascript" src="functions.js"></script>
         
-        <script defer>
-            //functions
-            function go_back(){
-                /** 
-                 Function to go back to the main page after the game is finished. Hides the shadow, endscreen and input field, and changes the instructions text.
-                */
-                var shadow = document.getElementById("shadow");
-                var endscreen =  document.getElementById("endscreen");
-                shadow.style.display = "none";
-                endscreen.style.display = "none";
-
-                var inp = document.getElementById("input");
-                inp.style.display = "none";
-
-                var button = document.getElementById("guessbutton");
-                button.style.display = "none";
-
-                var new_text = document.getElementById("instructions");
-                new_text.innerHTML = "check back tomorrow<br>for another brawler!"
-            }
-
-            function guess(){
-                var goodGuesses = 0;
-                if(game_finished == true) location.reload();
-
-                var guess_text = document.getElementById("input").value.toLowerCase();
-                document.getElementById("input").value = "";
-                updateSuggestions();
-
-                if(guess_text == "rt" || guess_text == "r t")
-                    guess_text = "r-t";
-                if(guess_text == "mrp" || guess_text == "mr p" || guess_text == "mr.p")
-                    guess_text = "mr. p";
-                if(guess_text == "8bit" || guess_text == "8 bit")
-                    guess_text = "8-bit";
-                if(guess_text == "larry" || guess_text == "lawrie" || guess_text == "larry lawrie" || guess_text == "larry&lawrie")
-                    guess_text = "larry & lawrie";
-
-                var brawler_nr = brawlers.indexOf(guess_text)
-
-                console.log(brawler_nr)
-                if(brawler_nr != -1 && canGuess == true){
-                    number_of_guesses++;
-                    gameSaveString += brawlers[brawler_nr].name + "|";
-
-                    var number = document.getElementById("rem_numb");
-                    number.innerHTML = 6-number_of_guesses;
-
-                    if(number_of_guesses > 3) number.style.color = "orange";
-                    if(number_of_guesses > 4) number.style.color = "red";
-
-                    var main_table = document.getElementById("main_table");
-
-                    var row = main_table.insertRow(1);
-
-                    var cell = row.insertCell(0);
-                    cell.className = "imageCell"; cell.align = "center";
-                    cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
-                    animateCSS(cell, "flipInX", "0s");
-                    console.log("HERE")
-
-    /*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
-                    if(brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-                    animateCSS(cell, "flipInX", "0.2s");
-
-                            // if rarity name too long
-                            if(brawlers[brawler_nr].rarity == "Legendary" || brawlers[brawler_nr].rarity == "Chromatic")
-                            cell.style = "font-size: min(3vw, 2vh)";
-
-    /*  WALLBREAK  */ var cell = row.insertCell(2); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].wall;
-                    if(brawlers[brawler_nr].wall == brawlers[m_brawler].wall)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-                    animateCSS(cell, "flipInX", "0.4s");
-
-    /*  HEALTH  */  var cell = row.insertCell(3); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].health;
-                    if(brawlers[brawler_nr].health == brawlers[m_brawler].health)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-
-                    if(brawlers[brawler_nr].health > brawlers[m_brawler].health)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].health < brawlers[m_brawler].health)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "0.6s");
-
-    /*  PROJECTILES  */ var cell = row.insertCell(4); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].projectiles;
-                    if(brawlers[brawler_nr].projectiles == brawlers[m_brawler].projectiles)     {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-
-                    if(brawlers[brawler_nr].projectiles > brawlers[m_brawler].projectiles)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].projectiles < brawlers[m_brawler].projectiles)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "0.8s");
-                    
-
-    /*  YEAR  */    var cell = row.insertCell(5); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].year;
-                    if(brawlers[brawler_nr].year == brawlers[m_brawler].year)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect"};
-
-                    if(brawlers[brawler_nr].year > brawlers[m_brawler].year)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].year < brawlers[m_brawler].year)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "1s");
-
-
-                    console.log(goodGuesses)
-                    if(goodGuesses == 5)
-                        m_brawler =  brawler_nr;
-
-                    if(showEnd == true){
-                        if(number_of_guesses == 6 && brawler_nr != m_brawler){
-                            localStorage.setItem("lastGame",gameSaveString);
-                            localStorage.setItem("lastGameNum",dayNumb);
-                            localStorage.setItem("dWinstreak",0);
-                            animate_endscreen();
-                            document.getElementById("endscreen-text").innerHTML = "the daily brawler was " + brawlers[m_brawler].name.toUpperCase() + "<br>better luck tomorrow!";
-                            document.getElementById("streak-img").style.display = "none";
-                            document.getElementById("streak1").style.display = "none";
-                            document.getElementById("streak2").style.display = "none";
-                            document.getElementById("streak4").innerHTML = localStorage.getItem("winsDbest");
-                        }
-                        if(brawler_nr == m_brawler)
-                        {
-                            localStorage.setItem("lastGame",gameSaveString);
-                            localStorage.setItem("lastGameNum",dayNumb);
-                            animate_endscreen();
-                            document.getElementById("endscreen-text").innerHTML = "you guessed " + brawlers[m_brawler].name.toUpperCase() + " correctly<br>play again tomorrow!";
-
-                            var winstreak = localStorage.getItem("dWinstreak");
-                            winstreak = parseInt(winstreak) + 1;
-                            localStorage.setItem("dWinstreak", winstreak);
-                            document.getElementById("streak1").innerHTML = winstreak +" ";
-                            
-                            var bestStreak = localStorage.getItem("winsDbest");
-                            bestStreak = parseInt(bestStreak);
-                            if(winstreak > bestStreak){
-                                localStorage.setItem("winsDbest", winstreak);
-                                bestStreak = winstreak;
-                            }
-
-                            console.log("best streak: "+ bestStreak);
-                            document.getElementById("streak4").innerHTML = bestStreak;
-                        }
-                    }
-
-                }
-            };
-//----------------------------------------------------------------//
+        <script>            
             //dark mode stuff
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -275,8 +132,9 @@
             }
             
             //menu stuff
-            var menuHid = localStorage.getItem("menuHid") || "0";
-            if(localStorage.getItem("menuHid") == "1"){
+            if (localStorage.getItem("menuHid") == null) {
+                localStorage.setItem("menuHid", false);
+            } else if (localStorage.getItem("menuHid") == 'true'){
                 document.getElementById("top").style.transition = "0s";
                 document.getElementById("logoarr").style.transition = "0s";
                 document.getElementById("navmain").style.transition = "0s";
@@ -288,6 +146,7 @@
                 for(var i = 0; i < x.length; i++){
                     x[i].style.transition = "0s";
                 }
+                localStorage.setItem("menuHid", false);
                 hidemenu();
                 document.getElementById("top").style.transition = "0.5s all";
                 document.getElementById("logoarr").style.transition = "0.5s all";
@@ -309,93 +168,211 @@
             window.onload = function(){checkSize();}
             checkSize();
 
-            //winstreak variables            
-            if(localStorage.getItem("dWinstreak") == null){
-                localStorage.setItem("dWinstreak", 0);
-            }
-
-            if(localStorage.getItem("winsDbest") == null || localStorage.getItem("winsDbest") == NaN || localStorage.getItem("winsDbest") == 'null'){
-                localStorage.setItem("winsDbest", 0);
-            }
-            
-
             var dayNumb = Math.floor(new Date() / 8.64e7) - 19703;
             var m_brawler = dailyNum[dayNumb];
-
-            var showEnd = true;
-            var canGuess = true;
-           
-            var lastGame = localStorage.getItem("lastGame");
-            var lastGameNum = localStorage.getItem("lastGameNum");
-        
-
-            if(dayNumb - 1 > lastGameNum){
-                localStorage.setItem("dWinstreak", 0);
-            }
-
-            if(lastGameNum == dayNumb){
-                console.log("already played today!");
-                showEnd = false;
-                document.getElementById("input").style.display = "none";
-                document.getElementById("guessbutton").style.display = "none";
-                document.getElementById("instructions").innerHTML = "check back tomorrow<br>for another brawler!";
-                document.getElementById("rem").style.display = "none";
-                var lastGameArray = new Array();
-                lastGameArray = lastGame.split("|");
-                for(var i=0; i<lastGameArray.length-1; i++){
-                    document.getElementById("input").value = lastGameArray[i];
-                    guess();
-                }
-                canGuess = false;
-            }
-            else{
-                localStorage.setItem("lastGame","");
-            }
-
-            var number_of_guesses = 0;
-            var gameSaveString = "";
-            var game_finished = false;
+            var keyboard = true;
 
             
+            var obj = JSON.parse(localStorage.getItem("currentGame"));
+            if (localStorage.getItem("currentGame") == null) {
+                localStorage.setItem("currentGame", JSON.stringify({
+                    dayNumb: dayNumb, 
+                    gameStatus: "unstarted", //status either unstarted, started, won, lost
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: 0,
+                    maxWinStreak: 0
+                }
+            ));
+            } else if (obj.dayNumb != dayNumb) {
+                localStorage.setItem("currentGame", JSON.stringify({
+                    dayNumb: dayNumb, 
+                    gameStatus: "unstarted", 
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: 0,
+                    maxWinStreak: obj.maxWinStreak
+                }
+            ));
+            } else if (obj.gameStatus == "started" ) {
+                var tempobj = {
+                    dayNumb: dayNumb, 
+                    gameStatus: "unstarted", 
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: obj.currentWinStreak,
+                    maxWinStreak: obj.maxWinStreak
+                };
+                lastGameArray = obj.gameString.split("|");
+                for (var i = 0; i < lastGameArray.length; i++) {
+                    document.getElementById("input").value = lastGameArray[i];
+                    tempobj = guess(tempobj);
+                    
+                }
+            } else if (obj.gameStatus == "won" || obj.gameStatus == "lost") {
+                var tempobj = {
+                    dayNumb: dayNumb, 
+                    gameStatus: "unstarted", 
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: obj.gameStatus == "won"? obj.currentWinStreak - 1: obj.currentWinStreak,
+                    maxWinStreak: obj.maxWinStreak
+                };
+                console.log(obj.gameString);
+                lastGameArray = obj.gameString.split("|");
+                for (var i = 0; i < lastGameArray.length; i++) {
+                    console.log(lastGameArray[i])
+                    document.getElementById("input").value = lastGameArray[i];
+                    tempobj = guess(tempobj);
+                }
+            }
 
-
-            document.addEventListener("keypress", function(event) {
-                if (event.keyCode == 13) {guess();}
+            
+            document.addEventListener("click", function(event) {
+                if ((event.target && event.target.id ==="guessbutton") || (event.target && event.target.id ==="keyboardGuess")){
+                    obj = JSON.parse(localStorage.getItem("currentGame"));
+                    obj = guess(obj);
+                    localStorage.setItem("currentGame", JSON.stringify(obj)); 
+                }
             });
 
-            function autocomplete(bName){
-                var input = document.getElementById("input");
-                input.value = bName;
-            }
+            document.addEventListener("keypress", function(event) {
+                if (event.keyCode == 13) {
+                    obj = JSON.parse(localStorage.getItem("currentGame"));
+                    obj = guess(obj);
+                    localStorage.setItem("currentGame", JSON.stringify(obj));
+            }});
+    
 
-            function updateSuggestions(){
-                var input = document.getElementById("input");
-                var sList = document.getElementById("brawlerSuggestion");
- 
-                sList.innerHTML = "";
-                for(var i=0; i<=brawlers.length-1; i++){
-                    if(brawlers[i].name.toLowerCase().includes(input.value.toLowerCase())){
-                        var bNameFix = '"'+brawlers[i].name+'"';
-                        sList.innerHTML += "<img src='"+ brawlers[i].name +".png' class='sBrawler' onclick='autocomplete("+ bNameFix +")'>";
-                    }
+            function guess(obj){
+                if (obj.gameStatus == 'won' || obj.gameStatus == 'lost') {
+                    return obj;
+                };
+
+                var guess_text = document.getElementById("input").value.toLowerCase();
+                document.getElementById("input").value = "";
+                updateSuggestions();
+                guess_text = autocorrect(guess_text)
+
+                var brawler_nr = 0
+                while(guess_text != brawlers[brawler_nr].name){
+                    brawler_nr++;
+                    if(brawler_nr == Object.keys(brawlers).length){
+                        return obj;
+                    }     
                 }
-            }
 
-            function kbPress(character){
-                var input = document.getElementById("input");
-                input.value += character;
-                updateSuggestions();
-            }
+                var goodGuesses = 0;
+                obj.gameStatus = "started"
+                obj.guesses++;
+                obj.gameString += brawlers[brawler_nr].name + "|";
 
-            function kbBack(){
-                var input = document.getElementById("input");
-                input.value = input.value.slice(0, -1); 
-                updateSuggestions();
-            }
+                var number = document.getElementById("rem_numb");
+                number.innerHTML = 6-obj.guesses;
 
-            var keyboard = true;
+                if(obj.guesses > 3) number.style.color = "orange";
+                if(obj.guesses > 4) number.style.color = "red";
+
+                var main_table = document.getElementById("main_table");
+
+                var row = main_table.insertRow(1);
+
+                var cell = row.insertCell(0);
+                cell.className = "imageCell"; cell.align = "center";
+                cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
+                animateCSS(cell, "flipInX", "0s");
+
+/*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
+                if(brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+                animateCSS(cell, "flipInX", "0.2s");
+
+                // if rarity name too long
+                if(brawlers[brawler_nr].rarity == "Legendary" || brawlers[brawler_nr].rarity == "Chromatic")
+                cell.style = "font-size: min(3vw, 2vh)";
+
+/*  WALLBREAK  */ var cell = row.insertCell(2); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].wall;
+                if(brawlers[brawler_nr].wall == brawlers[m_brawler].wall)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+                animateCSS(cell, "flipInX", "0.4s");
+
+/*  HEALTH  */  var cell = row.insertCell(3); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].health;
+                if(brawlers[brawler_nr].health == brawlers[m_brawler].health)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+
+                if(brawlers[brawler_nr].health > brawlers[m_brawler].health)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].health < brawlers[m_brawler].health)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "0.6s");
+
+/*  PROJECTILES  */ var cell = row.insertCell(4); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].projectiles;
+                if(brawlers[brawler_nr].projectiles == brawlers[m_brawler].projectiles)     {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+
+                if(brawlers[brawler_nr].projectiles > brawlers[m_brawler].projectiles)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].projectiles < brawlers[m_brawler].projectiles)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "0.8s");
+                
+
+/*  YEAR  */    var cell = row.insertCell(5); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].year;
+                if(brawlers[brawler_nr].year == brawlers[m_brawler].year)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect"};
+
+                if(brawlers[brawler_nr].year > brawlers[m_brawler].year)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].year < brawlers[m_brawler].year)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "1s");
+
+                if(goodGuesses == 5)
+                    m_brawler =  brawler_nr;
+
+
+                //lost
+                if(obj.guesses == 6 && brawler_nr != m_brawler){
+                    obj.currentWinStreak = 0;
+                    obj.gameStatus = "lost";
+                    animate_endscreen(brawlers[m_brawler].name);
+                    document.getElementById("endscreen-text").innerHTML = "the daily brawler was " + brawlers[m_brawler].name.toUpperCase() + "<br>better luck tomorrow!";
+                    document.getElementById("streak-img").style.display = "none";
+                    document.getElementById("streak1").style.display = "none";
+                    document.getElementById("streak2").style.display = "none";
+                    document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+                }
+
+                //won
+                if(brawler_nr == m_brawler){
+                    obj.currentWinStreak++;
+                    obj.maxWinStreak = Math.max(obj.maxWinStreak, obj.currentWinStreak);
+                    obj.gameStatus = "won";
+                    animate_endscreen(brawlers[m_brawler].name);
+                    document.getElementById("endscreen-text").innerHTML = "you guessed " + brawlers[m_brawler].name.toUpperCase() + " correctly<br>play again tomorrow!";
+                    document.getElementById("streak1").innerHTML = obj.currentWinStreak +" ";
+                    document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+                }
+                return obj
+                    
+            }
             
-            
+    
+            function go_back(){
+                /** 
+                 Function to go back to the main page after the game is finished. Hides the shadow, endscreen and input field, and changes the instructions text.
+                */
+                var shadow = document.getElementById("shadow");
+                var endscreen =  document.getElementById("endscreen");
+                shadow.style.display = "none";
+                endscreen.style.display = "none";
+
+                var inp = document.getElementById("input");
+                inp.style.display = "none";
+
+                var button = document.getElementById("guessbutton");
+                button.style.display = "none";
+
+                var new_text = document.getElementById("instructions");
+                new_text.innerHTML = "check back tomorrow<br>for another brawler!"
+
+                var rem = document.getElementById("rem");
+                rem.style.display = "none";
+            }
         </script>
 
         <datalist id="brawlers_list">

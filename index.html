@@ -22,29 +22,29 @@
         </nav>
 
         <main align="center">
-            <video id="bgvideo" src="images/background.mp4" autoplay loop muted poster="backgroundstill.png"></video>
+            <video id="bgvideo" src="images/background.mp4" autoplay loop muted poster="images/backgroundstill.png"></video>
             <div style="padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh;" id="instructions">
-                brawler guessing game!<br>
-                enter your guess here:
+                 guessing game!<br>
+                enbrawlerter your guess here:
             </div>
 
             <input list="brawlers_list" type="text" id="input" style="margin-bottom: 2vh;">
-            <button onclick="guess()" id="guessbutton">></button>
+            <button id="guessbutton">></button>
 
             <div style="padding-bottom: 0.9vh; font-size: 3vh;" id="remaining">
                 guesses remaining: <span id="rem_numb">6</span>
             </div>
 
-                <table id="main_table">
-                    <tr>
-                        <td style="opacity:0%;" class="tdtop"></td>
-                        <td align="center" class="tdtop">rarity</td>
-                        <td align="center" class="tdtop">wallbreak</td>
-                        <td align="center" class="tdtop">p11 health</td>
-                        <td align="center" class="tdtop">projectiles</td>
-                        <td align="center" class="tdtop">year</td>
-                    </tr>
-                </table>  
+            <table id="main_table">
+                <tr>
+                    <td style="opacity:0%;" class="tdtop"></td>
+                    <td align="center" class="tdtop">rarity</td>
+                    <td align="center" class="tdtop">wallbreak</td>
+                    <td align="center" class="tdtop">p11 health</td>
+                    <td align="center" class="tdtop">projectiles</td>
+                    <td align="center" class="tdtop">year</td>
+                </tr>
+            </table>  
             
             <div id="keyboardTop">
                 <div id="brawlerSuggestion">
@@ -93,7 +93,7 @@
                 <div onclick="kbPress('8')" class="keyboardKey">8</div>
                 <div onclick="kbPress(' ')" class="keyboardKey" id="keyboardSpace">_</div>
                 <div onclick="kbBack()" class="keyboardKey" id="keyboardBack"><img src="images/backspace.png" style="width: 6vw; height: auto;"></div>
-                <div onclick="guess()" class="keyboardKey" id="keyboardGuess">></div>
+                <div class="keyboardKey" id="keyboardGuess">></div>
             </div>
 
             <div style="position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.3); top: 0px;" id="shadow" class="endscreen"> </div>
@@ -102,10 +102,11 @@
                 <center>
 
                     <img id="endscreen-img" src="" draggable="false" style="height: 16.6vh; width: auto; margin-top: 10px;"><br>
-                    <div id="endscreen-text">the brawler was BIBI!<br>congratulations!</div><br>
+                    <div id="endscreen-text">the brawler was BIBI!<br>
+                        congratulations!</div><br>
                     <img id="streak-img" src="images/streakanim.gif"><span id="streak1">0 </span><span id="streak2">in a row!</span><br>
                     <span id="streak3">best streak: </span><span id="streak4">2</span><br><br>
-                    <button onclick="go_back()" id="back"><b><</b></button><button onclick="location.reload()" id="play-again">PLAY AGAIN</button><br><br>
+                    <button onclick="go_back()" id="back"><b><</b></button><button id="play-again">PLAY AGAIN</button><br><br>
 
                     <a href="https://youtube.com/@Krias" target="_blank"><img src="images/youtube.png">/ @Krias</a> <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a><br>
                     <a href="https://twitter.com/@KriasBS" target="_blank"><img src="images/twitter.png">/ @KriasBS</a>
@@ -114,99 +115,23 @@
             </div>
 
         </main>
-
+        <script type = "text/javascript" src="data.js"></script>
+        <script type = "text/javascript" src="functions.js"></script>
         <script defer>
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-
+            var keyboard = true;
             var darkmode = localStorage.getItem("darkmode") || urlParams.get('dm') || "0";
-            localStorage.setItem("darkmode", darkmode)
-            console.log(darkmode);
+            localStorage.setItem("darkmode", darkmode);
 
             if(darkmode == "1"){
                 darkmode = "0";
                 tdarkmode();
             }
-
-            function tdarkmode(){
-                if(darkmode == "0"){
-                    darkmode = "1";
-                    console.log("darkmode on");
-                    document.getElementById("linkdaily").href = "daily.html?dm=1";
-                    document.getElementById("linknormal").href = "index.html?dm=1";
-                    document.getElementById("linkhard").href = "hard.html?dm=1";
-                    document.getElementById("linktimed").href = "timed.html?dm=1";
-                    document.getElementById("bgvideo").style.filter = "brightness(50%)";
-                    document.getElementById("endscreen").style.color = "white";
-                    document.getElementById("back").style.color = "black";
-                    document.getElementById("endscreen").style.backgroundColor = "black";
-                    document.getElementById("endscreen").style.borderColor = "white";
-                    var x = document.getElementsByClassName("tdtop");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.color = "white";
-                        x[i].style.borderColor = "white";
-                    }
-                }
-                else{
-                    darkmode = "0";
-                    console.log("darkmode off");
-                    document.getElementById("linkdaily").href = "daily.html?dm=0";
-                    document.getElementById("linknormal").href = "index.html?dm=0";
-                    document.getElementById("linkhard").href = "hard.html?dm=0";
-                    document.getElementById("linktimed").href = "timed.html?dm=0";
-                    document.getElementById("bgvideo").style.filter = "brightness(100%)";
-                    document.getElementById("endscreen").style.color = "black";
-                    document.getElementById("back").style.color = "white";
-                    document.getElementById("endscreen").style.backgroundColor = "white";
-                    document.getElementById("endscreen").style.borderColor = "black";
-                    var x = document.getElementsByClassName("tdtop");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.color = "black";
-                        x[i].style.borderColor = "black";
-                    }
-                }
-                localStorage.setItem("darkmode", darkmode);
-            }
-
-            var menuHid = false
-            function hidemenu(){
-                if(!menuHid){
-                    menuHid = true
-                    localStorage.setItem("menuHid", "1");
-                    document.getElementById("top").style.height = "3.5vh";
-                    document.getElementById("logoarr").style.rotate = "180deg";
-                    var x = document.getElementsByClassName("logobutton");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.height = "2.5vh";
-                        x[i].style.marginBottom = "1vh";
-                    }
-                    x = document.getElementsByClassName("links");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.fontSize = "0vh";
-                    }
-                    document.getElementById("navmain").style.bottom = "1.5vh";
-                    document.getElementById("navmain").style.height = "0vh";
-                }
-                else{
-                    menuHid = false
-                    localStorage.setItem("menuHid", "0");
-                    document.getElementById("top").style.height = "7vh";
-                    document.getElementById("logoarr").style.rotate = "0deg";
-                    var x = document.getElementsByClassName("logobutton");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.height = "3vh";
-                        x[i].style.marginBottom = "2vh";
-                    }
-                    x = document.getElementsByClassName("links");
-                    for(var i = 0; i < x.length; i++){
-                        x[i].style.fontSize = "1.8vh";
-                    }
-                    document.getElementById("navmain").style.bottom = "0vh";
-                    document.getElementById("navmain").style.height = "2vh";
-                }
-            }
-
-            if(localStorage.getItem("menuHid") == "1"){
+            
+            if (localStorage.getItem("menuHid") == null) {
+                localStorage.setItem("menuHid", false);
+            } else if (localStorage.getItem("menuHid") == 'true'){
                 document.getElementById("top").style.transition = "0s";
                 document.getElementById("logoarr").style.transition = "0s";
                 document.getElementById("navmain").style.transition = "0s";
@@ -218,6 +143,7 @@
                 for(var i = 0; i < x.length; i++){
                     x[i].style.transition = "0s";
                 }
+                localStorage.setItem("menuHid", false);
                 hidemenu();
                 document.getElementById("top").style.transition = "0.5s all";
                 document.getElementById("logoarr").style.transition = "0.5s all";
@@ -232,163 +158,177 @@
                 }
             }
 
-            //              /\   NEW CODE!!!!!!!!!!!   
             document.addEventListener('contextmenu', event => event.preventDefault());
 
-            function checkSize(){
-                const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-                const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
-                var screenRatio = width / height;    
-                //console.log(screenRatio);
-                
-                if(screenRatio > 0.75){
-                    document.getElementById("keyboardTop").style.display = "none";
-                    document.getElementById("keyboard1").style.display = "none";
-                    document.getElementById("keyboard2").style.display = "none";
-                    document.getElementById("keyboard3").style.display = "none";
-                    document.getElementById("keyboard4").style.display = "none";
-                    document.getElementById("input").readOnly = false;
-                }
-                else{
-                    document.getElementById("keyboardTop").style.opacity = "100%";
-                    document.getElementById("keyboard1").style.opacity = "100%";
-                    document.getElementById("keyboard2").style.opacity = "100%";
-                    document.getElementById("keyboard3").style.opacity = "100%";
-                    document.getElementById("keyboard4").style.opacity = "100%";
-                    document.getElementById("input").readOnly = true;
-                }
-            }
+            
             window.onresize = function(){checkSize();}
             window.onload = function(){checkSize();}
+            checkSize();
 
-            // -------------------------------------------------------------------------------------------------------- //
-
-            var brawlers = new Array();
-            brawlers[0] = {name: "shelly", rarity: "Starter", wall: "Yes", health: 7400, projectiles: 5, year: 2017};
-
-            brawlers[1] = {name: "nita", rarity: "Rare", wall: "No", health: 8000, projectiles: 1, year: 2017};     // rare
-            brawlers[2] = {name: "colt", rarity: "Rare", wall: "Yes", health: 5600, projectiles: 6, year: 2017};
-            brawlers[3] = {name: "bull", rarity: "Rare", wall: "Yes", health: 10000, projectiles: 5, year: 2017};
-            brawlers[4] = {name: "brock", rarity: "Rare", wall: "Yes", health: 4800, projectiles: 1, year: 2017};
-            brawlers[5] = {name: "el primo", rarity: "Rare", wall: "Yes", health: 12000, projectiles: 4, year: 2017};
-            brawlers[6] = {name: "barley", rarity: "Rare", wall: "No", health: 4800, projectiles: 1, year: 2017};
-            brawlers[7] = {name: "poco", rarity: "Rare", wall: "No", health: 7400, projectiles: 1, year: 2017};
-            brawlers[8] = {name: "rosa", rarity: "Rare", wall: "No", health: 10000, projectiles: 3, year: 2019};
-
-            brawlers[9] = {name: "jessie", rarity: "Super Rare", wall: "No", health: 6000, projectiles: 1, year: 2017};     // s rare
-            brawlers[10] = {name: "dynamike", rarity: "Super Rare", wall: "Yes", health: 5600, projectiles: 2, year: 2017};
-            brawlers[11] = {name: "tick", rarity: "Super Rare", wall: "Yes", health: 4400, projectiles: 3, year: 2019};
-            brawlers[12] = {name: "8-bit", rarity: "Super Rare", wall: "No", health: 10000, projectiles: 6, year: 2019};
-            brawlers[13] = {name: "rico", rarity: "Super Rare", wall: "No", health: 5600, projectiles: 5, year: 2017};
-            brawlers[14] = {name: "darryl", rarity: "Super Rare", wall: "No", health: 10600, projectiles: 10, year: 2017};
-            brawlers[15] = {name: "penny", rarity: "Super Rare", wall: "No", health: 6400, projectiles: 1, year: 2018};
-            brawlers[16] = {name: "carl", rarity: "Super Rare", wall: "No", health: 8000, projectiles: 1, year: 2019};
-            brawlers[17] = {name: "jacky", rarity: "Super Rare", wall: "No", health: 10000, projectiles: 1, year: 2020};
-            brawlers[18] = {name: "gus", rarity: "Super Rare", wall: "No", health: 6400, projectiles: 1, year: 2022};
-
-            brawlers[19] = {name: "bo", rarity: "Epic", wall: "Yes", health: 7200, projectiles: 3, year: 2017};       // epic
-            brawlers[20] = {name: "emz", rarity: "Epic", wall: "No", health: 7200, projectiles: 1, year: 2019};
-            brawlers[21] = {name: "stu", rarity: "Epic", wall: "Yes", health: 5800, projectiles: 2, year: 2021};
-            brawlers[22] = {name: "piper", rarity: "Epic", wall: "Yes", health: 4600, projectiles: 1, year: 2017};
-            brawlers[23] = {name: "pam", rarity: "Epic", wall: "No", health: 9600, projectiles: 9, year: 2017};
-            brawlers[24] = {name: "frank", rarity: "Epic", wall: "Yes", health: 14000, projectiles: 1, year: 2018};
-            brawlers[25] = {name: "bibi", rarity: "Epic", wall: "No", health: 9600, projectiles: 1, year: 2019};
-            brawlers[26] = {name: "bea", rarity: "Epic", wall: "No", health: 5000, projectiles: 1, year: 2019};
-            brawlers[27] = {name: "nani", rarity: "Epic", wall: "Yes", health: 4800, projectiles: 3, year: 2020};
-            brawlers[28] = {name: "edgar", rarity: "Epic", wall: "No", health: 6600, projectiles: 2, year: 2020};
-            brawlers[29] = {name: "griff", rarity: "Epic", wall: "Yes", health: 6800, projectiles: 9, year: 2021};
-            brawlers[30] = {name: "grom", rarity: "Epic", wall: "Yes", health: 5600, projectiles: 1, year: 2021};
-            brawlers[31] = {name: "bonnie", rarity: "Epic", wall: "No", health: 9600, projectiles: 1, year: 2022};
-            brawlers[32] = {name: "hank", rarity: "Epic", wall: "No", health: 11200, projectiles: 1, year: 2023};
-
-            brawlers[33] = {name: "mortis", rarity: "Mythic", wall: "No", health: 7600, projectiles: 1, year: 2017};    // mythic
-            brawlers[34] = {name: "tara", rarity: "Mythic", wall: "Yes", health: 6200, projectiles: 3, year: 2017};
-            brawlers[35] = {name: "gene", rarity: "Mythic", wall: "Yes", health: 7200, projectiles: 1, year: 2019};
-            brawlers[36] = {name: "max", rarity: "Mythic", wall: "No", health: 6600, projectiles: 4, year: 2019};
-            brawlers[37] = {name: "mr. p", rarity: "Mythic", wall: "No", health: 6800, projectiles: 1, year: 2020};
-            brawlers[38] = {name: "sprout", rarity: "Mythic", wall: "No", health: 6000, projectiles: 1, year: 2020};
-            brawlers[39] = {name: "byron", rarity: "Mythic", wall: "No", health: 4800, projectiles: 1, year: 2020};
-            brawlers[40] = {name: "squeak", rarity: "Mythic", wall: "No", health: 7200, projectiles: 1, year: 2021};
-            brawlers[41] = {name: "gray", rarity: "Mythic", wall: "Yes", health: 6600, projectiles: 1, year: 2022};
-            brawlers[42] = {name: "willow", rarity: "Mythic", wall: "No", health: 5600, projectiles: 1, year: 2023};
-            brawlers[43] = {name: "doug", rarity: "Mythic", wall: "No", health: 10000, projectiles: 1, year: 2023};
-            brawlers[44] = {name: "chuck", rarity: "Mythic", wall: "No", health: 9000, projectiles: 3, year: 2023};
             
-            brawlers[45] = {name: "spike", rarity: "Legendary", wall: "No", health: 4800, projectiles: 1, year: 2017};  // legendary
-            brawlers[46] = {name: "crow", rarity: "Legendary", wall: "No", health: 4800, projectiles: 3, year: 2017};
-            brawlers[47] = {name: "leon", rarity: "Legendary", wall: "No", health: 6800, projectiles: 4, year: 2018};
-            brawlers[48] = {name: "sandy", rarity: "Legendary", wall: "No", health: 7600, projectiles: 1, year: 2019};
-            brawlers[49] = {name: "amber", rarity: "Legendary", wall: "No", health: 6400, projectiles: 1, year: 2020};
-            brawlers[50] = {name: "meg", rarity: "Legendary", wall: "No", health: 8000, projectiles: 16, year: 2021};
-            brawlers[51] = {name: "chester", rarity: "Legendary", wall: "Yes", health: 7400, projectiles: 1, year: 2022};
+            var obj = JSON.parse(localStorage.getItem("currentNormalGame"));
+            if (localStorage.getItem("currentNormalGame") == null) {
+                localStorage.setItem("currentNormalGame", JSON.stringify({
+                    gameStatus: 'unstarted',
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: 0,
+                    maxWinStreak: 0,
+                    m_brawler : Math.round(Math.random() * 81)
+                })
+            )} else if (obj.gameStatus != "unstarted" ) {
+                var tempobj = {
+                    gameStatus: "unstarted", 
+                    guesses: 0,
+                    gameString: "",
+                    currentWinStreak: obj.currentWinStreak,
+                    maxWinStreak: obj.maxWinStreak,
+                    m_brawler: obj.m_brawler
+                };
+                
+                lastGameArray = obj.gameString.split("|");
+                for (var i = 0; i < lastGameArray.length; i++) {
+                    document.getElementById("input").value = lastGameArray[i];
+                    tempobj = guess(tempobj);
+                }
+            }
+            
 
-            brawlers[52] = {name: "gale", rarity: "Epic", wall: "No", health: 7600, projectiles: 6, year: 2020};        // ex chromatics
-            brawlers[53] = {name: "surge", rarity: "Legendary", wall: "No", health: 6600, projectiles: 1, year: 2020};
-            brawlers[54] = {name: "colette", rarity: "Epic", wall: "No", health: 6800, projectiles: 1, year: 2020};
-            brawlers[55] = {name: "lou", rarity: "Mythic", wall: "No", health: 6400, projectiles: 3, year: 2020};
-            brawlers[56] = {name: "ruffs", rarity: "Mythic", wall: "Yes", health: 5600, projectiles: 2, year: 2021};
-            brawlers[57] = {name: "belle", rarity: "Epic", wall: "No", health: 5200, projectiles: 1, year: 2021};
-            brawlers[58] = {name: "buzz", rarity: "Mythic", wall: "No", health: 9600, projectiles: 5, year: 2021};
-            brawlers[59] = {name: "ash", rarity: "Epic", wall: "No", health: 10800, projectiles: 1, year: 2021};
-            brawlers[60] = {name: "lola", rarity: "Epic", wall: "No", health: 7600, projectiles: 6, year: 2021};
-            brawlers[61] = {name: "fang", rarity: "Mythic", wall: "No", health: 8600, projectiles: 1, year: 2022};
-            brawlers[62] = {name: "eve", rarity: "Mythic", wall: "No", health: 5800, projectiles: 3, year: 2022};
-            brawlers[63] = {name: "janet", rarity: "Mythic", wall: "No", health: 6400, projectiles: 1, year: 2022};
-            brawlers[64] = {name: "otis", rarity: "Mythic", wall: "No", health: 6400, projectiles: 3, year: 2022};
-            brawlers[65] = {name: "sam", rarity: "Epic", wall: "No", health: 10800, projectiles: 2, year: 2022};
-            brawlers[66] = {name: "buster", rarity: "Mythic", wall: "No", health: 10400, projectiles: 1, year: 2022};
-            brawlers[67] = {name: "mandy", rarity: "Epic", wall: "No", health: 5600, projectiles: 1, year: 2022};
-            brawlers[68] = {name: "r-t", rarity: "Mythic", wall: "No", health: 7800, projectiles: 1, year: 2023};
-            brawlers[69] = {name: "maisie", rarity: "Epic", wall: "No", health: 7200, projectiles: 1, year: 2023};
-            brawlers[70] = {name: "cordelius", rarity: "Legendary", wall: "No", health: 6400, projectiles: 2, year: 2023};
-            brawlers[71] = {name: "pearl", rarity: "Epic", wall: "Yes", health: 7800, projectiles: 6, year: 2023};
-            brawlers[72] = {name: "charlie", rarity: "Mythic", wall: "No", health: 6600, projectiles: 1, year: 2023};
 
-            brawlers[73] = {name: "mico", rarity: "Mythic", wall: "No", health: 6000, projectiles: 1, year: 2023};   // everyone after s21
-            brawlers[74] = {name: "kit", rarity: "Legendary", wall: "No", health: 6000, projectiles: 1, year: 2023};
-            brawlers[75] = {name: "larry & lawrie", rarity: "Epic", wall: "No", health: 6000, projectiles: 1, year: 2024};
-            brawlers[76] = {name: "angelo", rarity: "Epic", wall: "No", health: 6000, projectiles: 1, year: 2024};
-            brawlers[77] = {name: "melodie", rarity: "Mythic", wall: "No", health: 7200, projectiles: 1, year: 2024};
-            brawlers[78] = {name: "lily", rarity: "Mythic", wall: "No", health: 8200, projectiles: 1, year: 2024};
-            brawlers[79] = {name: "draco", rarity: "Legendary", wall: "No", health: 11000, projectiles: 1, year: 2024};
-            brawlers[80] = {name: "berry", rarity: "Epic", wall: "No", health: 5000, projectiles: 1, year: 2024};
-            brawlers[81] = {name: "clancy", rarity: "Mythic", wall: "No", health: 6600, projectiles: 1, year: 2024};
 
-            // -------------------------------------------------------------------------------------------------------- //
-
-            const animateCSS = (element, animation, delay, prefix = 'animate__') =>
-                new Promise((resolve, reject) => {
-                    const animationName = `${prefix}${animation}`;
-                    const node = element
-                    node.style.setProperty('animation-delay', delay);
-                    node.style.setProperty('--animate-duration', '0.5s');
-                    
-                    node.classList.add(`${prefix}animated`, animationName);
-
-                    function handleAnimationEnd(event) {
-                    event.stopPropagation();
-                    node.classList.remove(`${prefix}animated`, animationName);
-                    resolve('Animation ended');
-                    }
-
-                    node.addEventListener('animationend', handleAnimationEnd, {once: true});
+            document.addEventListener("click", function(event) {
+                if (event.target && event.target.id ==="play-again"){
+                    obj = JSON.parse(localStorage.getItem("currentNormalGame"));
+                    obj.gameStatus = 'unstarted';
+                    obj.guesses = 0;
+                    obj.gameString = "";
+                    obj.m_brawler = Math.round(Math.random() * 81);
+                    localStorage.setItem("currentNormalGame", JSON.stringify(obj));
+                    location.reload();
+                } else if ((event.target && event.target.id ==="guessbutton") || (event.target && event.target.id ==="keyboardGuess")){
+                    obj = JSON.parse(localStorage.getItem("currentNormalGame"));
+                    obj = guess(obj);
+                    localStorage.setItem("currentNormalGame", JSON.stringify(obj)); 
+                }
             });
 
-            // -------------------------------------------------------------------------------------------------------- //
+            document.addEventListener("keypress", function(event) {
+                if (event.keyCode == 13) {
+                    obj = JSON.parse(localStorage.getItem("currentNormalGame"));
+                    obj = guess(obj);
+                    localStorage.setItem("currentNormalGame", JSON.stringify(obj));
+            }});
 
-            function animate_endscreen(){
-                var shadow = document.getElementById("shadow");
-                var endscreen =  document.getElementById("endscreen");
-                shadow.style.display = "inherit";
-                endscreen.style.display = "inherit";
 
-                document.getElementById("endscreen-img").src = "images/" + brawlers[m_brawler].name + ".png";
+            function guess(obj){
+                if (obj.gameStatus == 'won' || obj.gameStatus == 'lost') {
+                    return obj;
+                };
 
-                animateCSS(shadow, "fadeIn", "2s");
-                animateCSS(endscreen, "fadeInDown", "2s");
+                var guess_text = document.getElementById("input").value.toLowerCase();
+                guess_text = autocorrect(guess_text);
+                document.getElementById("input").value = "";
+                updateSuggestions();
+
+                
+                var brawler_nr = 0
+                while(guess_text != brawlers[brawler_nr].name){
+                    brawler_nr++;
+                    if(brawler_nr == Object.keys(brawlers).length){
+                        return obj;
+                    }     
+                }
+                var goodGuesses = 0;
+                obj.guesses++;
+                obj.gameStatus = "started";
+                obj.gameString += brawlers[brawler_nr].name + "|";
+
+                var number = document.getElementById("rem_numb");
+                number.innerHTML = 6-obj.guesses;
+                if(obj.guesses > 3) number.style.color = "orange";
+                if(obj.guesses > 4) number.style.color = "red";
+
+                var main_table = document.getElementById("main_table");
+
+                var row = main_table.insertRow(1);
+                var cell = row.insertCell(0);
+                cell.className = "imageCell"; cell.align = "center";
+                cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
+                animateCSS(cell, "flipInX", "0s");
+
+/*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
+                if(brawlers[brawler_nr].rarity == brawlers[obj.m_brawler].rarity)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+                animateCSS(cell, "flipInX", "0.2s");
+
+                        // if rarity name too long
+                        if(brawlers[brawler_nr].rarity == "Legendary" || brawlers[brawler_nr].rarity == "Chromatic")
+                        cell.style = "font-size: min(3vw, 2vh)";
+
+/*  WALLBREAK  */ var cell = row.insertCell(2); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].wall;
+                if(brawlers[brawler_nr].wall == brawlers[obj.m_brawler].wall)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+                animateCSS(cell, "flipInX", "0.4s");
+
+/*  HEALTH  */  var cell = row.insertCell(3); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].health;
+                if(brawlers[brawler_nr].health == brawlers[obj.m_brawler].health)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+
+                if(brawlers[brawler_nr].health > brawlers[obj.m_brawler].health)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].health < brawlers[obj.m_brawler].health)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "0.6s");
+
+/*  PROJECTILES  */ var cell = row.insertCell(4); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].projectiles;
+                if(brawlers[brawler_nr].projectiles == brawlers[obj.m_brawler].projectiles)     {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect";}
+
+                if(brawlers[brawler_nr].projectiles > brawlers[obj.m_brawler].projectiles)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].projectiles < brawlers[obj.m_brawler].projectiles)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "0.8s");
+                
+
+/*  YEAR  */    var cell = row.insertCell(5); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].year;
+                if(brawlers[brawler_nr].year == brawlers[obj.m_brawler].year)   {cell.className = "correct"; goodGuesses++;}
+                else    {cell.className = "incorrect"};
+
+                if(brawlers[brawler_nr].year > brawlers[obj.m_brawler].year)   cell.style = "background-image: url(images/lower.png)";
+                if(brawlers[brawler_nr].year < brawlers[obj.m_brawler].year)    cell.style = "background-image: url(images/higher.png)";
+                animateCSS(cell, "flipInX", "1s");
+
+        // -------------------------------------------------------------------------------------------------------- //
+
+                if(goodGuesses == 5)
+                    obj.m_brawler =  brawler_nr;
+
+
+                if(obj.guesses == 6 && brawler_nr != obj.m_brawler){
+                obj.gameStatus = "lost";
+                obj.currentWinStreak = 0;
+                animate_endscreen(brawlers[obj.m_brawler].name);
+                document.getElementById("endscreen-text").innerHTML = "the correct brawler was " + brawlers[obj.m_brawler].name.toUpperCase() + "<br>better luck next time!";
+                document.getElementById("streak-img").style.display = "none";
+                document.getElementById("streak1").style.display = "none";
+                document.getElementById("streak2").style.display = "none";
+                document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+
+                }
+                if(brawler_nr == obj.m_brawler){
+                    obj.currentWinStreak ++;
+                    obj.maxWinStreak = Math.max(obj.currentWinStreak, obj.maxWinStreak);
+                    obj.gameStatus = "won";
+                    animate_endscreen(brawlers[obj.m_brawler].name);
+                    document.getElementById("endscreen-text").innerHTML = "you guessed " + brawlers[obj.m_brawler].name.toUpperCase() + " correctly<br>congratulations!";
+                    document.getElementById("streak1").innerHTML = obj.currentWinStreak +" ";
+                    document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+                };
+                return obj;
+
             }
 
-            var game_finished = false;
+
+
+            
+            
             function go_back(){
                 var shadow = document.getElementById("shadow");
                 var endscreen =  document.getElementById("endscreen");
@@ -403,290 +343,14 @@
                 button.id = "play-again";
                 button.innerHTML = "PLAY AGAIN";
                 button.style = "box-sizing: border-box; height: min(7vw, 4vh)";
-                game_finished = true;
 
                 var new_text = document.getElementById("instructions");
                 new_text.innerHTML = "brawler guessing game!<br>click here to play again"
             }
-
-            // -------------------------------------------------------------------------------------------------------- //
-
-            var number_of_guesses = 0;
-            var m_brawler = 0;
-            m_brawler = Math.round(Math.random() * 81);
-            // console.log("hidden brawler: "+brawlers[m_brawler].name);
-
-            function guess(){
-                var goodGuesses = 0;
-                if(game_finished == true) location.reload();
-
-                var guess_text = document.getElementById("input").value.toLowerCase();
-                document.getElementById("input").value = "";
-                updateSuggestions();
-
-                if(guess_text == "rt" || guess_text == "r t")
-                    guess_text = "r-t";
-                if(guess_text == "mrp" || guess_text == "mr p" || guess_text == "mr.p")
-                    guess_text = "mr. p";
-                if(guess_text == "8bit" || guess_text == "8 bit")
-                    guess_text = "8-bit";
-                if(guess_text == "larry" || guess_text == "lawrie" || guess_text == "larry lawrie" || guess_text == "larry&lawrie")
-                    guess_text = "larry & lawrie";
-
-                var brawler_nr = brawlers.indexOf(guess_text);
-                
-                if(brawler_nr != -1){
-                    number_of_guesses++;
-
-                    var number = document.getElementById("rem_numb");
-                    number.innerHTML = 6-number_of_guesses;
-                    if(number_of_guesses > 3) number.style.color = "orange";
-                    if(number_of_guesses > 4) number.style.color = "red";
-
-                    var main_table = document.getElementById("main_table");
-
-                    var row = main_table.insertRow(1);
-                    var cell = row.insertCell(0);
-                    cell.className = "imageCell"; cell.align = "center";
-                    cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
-                    animateCSS(cell, "flipInX", "0s");
-
-    /*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
-                    if(brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-                    animateCSS(cell, "flipInX", "0.2s");
-
-                            // if rarity name too long
-                            if(brawlers[brawler_nr].rarity == "Legendary" || brawlers[brawler_nr].rarity == "Chromatic")
-                            cell.style = "font-size: min(3vw, 2vh)";
-
-    /*  WALLBREAK  */ var cell = row.insertCell(2); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].wall;
-                    if(brawlers[brawler_nr].wall == brawlers[m_brawler].wall)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-                    animateCSS(cell, "flipInX", "0.4s");
-
-    /*  HEALTH  */  var cell = row.insertCell(3); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].health;
-                    if(brawlers[brawler_nr].health == brawlers[m_brawler].health)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-
-                    if(brawlers[brawler_nr].health > brawlers[m_brawler].health)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].health < brawlers[m_brawler].health)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "0.6s");
-
-    /*  PROJECTILES  */ var cell = row.insertCell(4); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].projectiles;
-                    if(brawlers[brawler_nr].projectiles == brawlers[m_brawler].projectiles)     {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect";}
-
-                    if(brawlers[brawler_nr].projectiles > brawlers[m_brawler].projectiles)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].projectiles < brawlers[m_brawler].projectiles)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "0.8s");
-                    
-
-    /*  YEAR  */    var cell = row.insertCell(5); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].year;
-                    if(brawlers[brawler_nr].year == brawlers[m_brawler].year)   {cell.className = "correct"; goodGuesses++;}
-                    else    {cell.className = "incorrect"};
-
-                    if(brawlers[brawler_nr].year > brawlers[m_brawler].year)   cell.style = "background-image: url(lower.png)";
-                    if(brawlers[brawler_nr].year < brawlers[m_brawler].year)    cell.style = "background-image: url(higher.png)";
-                    animateCSS(cell, "flipInX", "1s");
-
-            // -------------------------------------------------------------------------------------------------------- //
-
-                    console.log(goodGuesses)
-                    if(goodGuesses == 5)
-                        m_brawler =  brawler_nr;
-
-                    if(localStorage.getItem("winsNbest") == null){
-                        localStorage.setItem("winsNbest", 0);
-                    }
-                    if(localStorage.getItem("winsN") == null){
-                        localStorage.setItem("winsN", 0);
-                    }
-
-                    if(number_of_guesses == 6 && brawler_nr != m_brawler){
-                        animate_endscreen();
-                        document.getElementById("endscreen-text").innerHTML = "the correct brawler was " + brawlers[m_brawler].name.toUpperCase() + "<br>better luck next time!";
-                        localStorage.setItem("winsN", 0);
-                        document.getElementById("streak-img").style.display = "none";
-                        document.getElementById("streak1").style.display = "none";
-                        document.getElementById("streak2").style.display = "none";
-                        document.getElementById("streak4").innerHTML = localStorage.getItem("winsNbest");
-                    }
-                    if(brawler_nr == m_brawler)
-                    {
-                        animate_endscreen();
-                        document.getElementById("endscreen-text").innerHTML = "you guessed " + brawlers[m_brawler].name.toUpperCase() + " correctly<br>congratulations!";
-                        var winstreak = localStorage.getItem("winsN");
-                        winstreak = parseInt(winstreak) + 1;
-                        localStorage.setItem("winsN", winstreak);
-                        document.getElementById("streak1").innerHTML = winstreak +" ";
-                        
-                        var bestStreak = localStorage.getItem("winsNbest");
-                        if(winstreak > parseInt(bestStreak)){
-                            localStorage.setItem("winsNbest", winstreak)
-                        }
-
-                        document.getElementById("streak4").innerHTML = localStorage.getItem("winsNbest");
-                    }
-
-                }
-            };
-
-            // -------------------------------------------------------------------------------------------------------- //
-
-            document.addEventListener("keypress", function(event) {
-                if (event.keyCode == 13) {
-                    guess();
-                }
-            });
-
-            // -------------------------------------------------------------------------------------------------------- //
-
-            function autocomplete(bName){
-                var input = document.getElementById("input");
-                input.value = bName;
-            }
-
-            function updateSuggestions(){
-                var input = document.getElementById("input");
-                var sList = document.getElementById("brawlerSuggestion");
-
-                sList.innerHTML = "";
-                for(var i=0; i<=brawlers.length-1; i++){
-                    if(brawlers[i].name.toLowerCase().includes(input.value.toLowerCase())){
-                        var bNameFix = '"'+brawlers[i].name+'"';
-                        sList.innerHTML += "<img src='images/"+ brawlers[i].name +".png' class='sBrawler' onclick='autocomplete("+ bNameFix +")'>";
-                    }
-                }
-            }
-
-            function kbPress(character){
-                var input = document.getElementById("input");
-                input.value += character;
-                updateSuggestions();
-            }
-
-            function kbBack(){
-                var input = document.getElementById("input");
-                input.value = input.value.slice(0, -1); 
-                updateSuggestions();
-            }
-
-            var keyboard = true;
-            function toggleKeyboard(){
-                if(keyboard){
-                    document.getElementById("keyboard1").style.display = "none";
-                    document.getElementById("keyboard2").style.display = "none";
-                    document.getElementById("keyboard3").style.display = "none";
-                    document.getElementById("keyboard4").style.display = "none";
-                    document.getElementById("toggleKeyboard").innerHTML = "+";
-                    document.getElementById("keyboardTop").style.bottom = "0px";
-                    keyboard = !keyboard;
-                }
-                else{
-                    document.getElementById("keyboard1").style.display = "grid";
-                    document.getElementById("keyboard2").style.display = "grid";
-                    document.getElementById("keyboard3").style.display = "grid";
-                    document.getElementById("keyboard4").style.display = "grid";
-                    document.getElementById("toggleKeyboard").innerHTML = "-";
-                    document.getElementById("keyboardTop").style.bottom = "36vh";
-                    keyboard = !keyboard;
-                }
-            }
             
         </script>
 
-        <datalist id="brawlers_list">
-            <option value="Shelly"></option>
-
-            <option value="Nita"></option>
-            <option value="Colt"></option>
-            <option value="Bull"></option>
-            <option value="Brock"></option>
-            <option value="El Primo"></option>
-            <option value="Barley"></option>
-            <option value="Poco"></option>
-            <option value="Rosa"></option>
-
-            <option value="Jessie"></option>
-            <option value="Dynamike"></option>
-            <option value="Tick"></option>
-            <option value="8-bit"></option>
-            <option value="Rico"></option>
-            <option value="Darryl"></option>
-            <option value="Penny"></option>
-            <option value="Carl"></option>
-            <option value="Jacky"></option>
-            <option value="Gus"></option>
-
-            <option value="Bo"></option>
-            <option value="Emz"></option>
-            <option value="Stu"></option>
-            <option value="Piper"></option>
-            <option value="Pam"></option>
-            <option value="Frank"></option>
-            <option value="Bibi"></option>
-            <option value="Bea"></option>
-            <option value="Nani"></option>
-            <option value="Edgar"></option>
-            <option value="Griff"></option>
-            <option value="Grom"></option>
-            <option value="Bonnie"></option>
-            <option value="Hank"></option>
-
-            <option value="Mortis"></option>
-            <option value="Tara"></option>
-            <option value="Gene"></option>
-            <option value="Max"></option>
-            <option value="Mr. P"></option>
-            <option value="Sprout"></option>
-            <option value="Byron"></option>
-            <option value="Squeak"></option>
-            <option value="Gray"></option>
-            <option value="Willow"></option>
-            <option value="Doug"></option>
-            <option value="Chuck"></option>
-
-            <option value="Spike"></option>
-            <option value="Crow"></option>
-            <option value="Leon"></option>
-            <option value="Sandy"></option>
-            <option value="Amber"></option>
-            <option value="Meg"></option>
-            <option value="Chester"></option>
-
-            <option value="Gale"></option>
-            <option value="Surge"></option>
-            <option value="Colette"></option>
-            <option value="Lou"></option>
-            <option value="Ruffs"></option>
-            <option value="Belle"></option>
-            <option value="Buzz"></option>
-            <option value="Ash"></option>
-            <option value="Lola"></option>
-            <option value="Fang"></option>
-            <option value="Eve"></option>
-            <option value="Janet"></option>
-            <option value="Otis"></option>
-            <option value="Sam"></option>
-            <option value="Buster"></option>
-            <option value="Mandy"></option>
-            <option value="R-T"></option>
-            <option value="Maisie"></option>
-            <option value="Cordelius"></option>
-            <option value="Pearl"></option>
-            <option value="Charlie"></option>
-
-            <option value="Mico"></option>
-            <option value="Kit"></option>
-            <option value="Larry & Lawrie"></option>
-            <option value="Angelo"></option>
-            <option value="Melodie"></option>
-            <option value="Lily"></option>
-            <option value="Draco"></option>
-            <option value="Berry"></option>
-            <option value="Clancy"></option>
-        </datalist>
+        
 
     </body>
 </html>
