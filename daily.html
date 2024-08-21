@@ -180,17 +180,19 @@
                     gameStatus: "unstarted", //status either unstarted, started, won, lost
                     guesses: 0,
                     gameString: "",
-                    currentWinStreak: 0,
-                    maxWinStreak: 0
+                    currentWinStreak: localStorage.getItem("dWinstreak") || 0,
+                    maxWinStreak: localStorage.getItem("winsDbest") || 0
                 }
             ));
             } else if (obj.dayNumb != dayNumb) {
                 localStorage.setItem("currentGame", JSON.stringify({
                     dayNumb: dayNumb, 
+                    // save the current winstreak if last game was yesterday and the last game and today are consecutive
+                    currentWinStreak: (dayNumb - obj.dayNumb == 1 && obj.gameStatus == "won") ? obj.currentWinStreak : 0,  
                     gameStatus: "unstarted", 
                     guesses: 0,
-                    gameString: "",
-                    currentWinStreak: 0,
+                    gameString: "",    
+                    
                     maxWinStreak: obj.maxWinStreak
                 }
             ));
@@ -230,7 +232,7 @@
             
             document.addEventListener("click", function(event) {
                 if ((event.target && event.target.id ==="guessbutton") || (event.target && event.target.id ==="keyboardGuess")){
-                    obj = JSON.parse(localStorage.getItem("currentGame"));
+                    var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
                     localStorage.setItem("currentGame", JSON.stringify(obj)); 
                 }
@@ -238,7 +240,7 @@
 
             document.addEventListener("keypress", function(event) {
                 if (event.keyCode == 13) {
-                    obj = JSON.parse(localStorage.getItem("currentGame"));
+                    var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
                     localStorage.setItem("currentGame", JSON.stringify(obj));
             }});

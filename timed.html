@@ -171,8 +171,8 @@
                     gameStatus: 'unstarted',
                     guesses: 0,
                     gameString: "",
-                    currentWinStreak: 0,
-                    maxWinStreak: 0,
+                    currentWinStreak: localStorage.getItem("winsT") || 0,
+                    maxWinStreak: localStorage.getItem("winsTbest") || 0,
                     m_brawler : Math.round(Math.random() * 81),
                     timerem : 45
                 })

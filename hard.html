@@ -171,8 +171,8 @@
                     gameStatus: 'unstarted',
                     guesses: 0,
                     gameString: "",
-                    currentWinStreak: 0,
-                    maxWinStreak: 0,
+                    currentWinStreak: localStorage.getItem("winsH") || 0,
+                    maxWinStreak: localStorage.getItem("winsHbest")|| 0,
                     m_brawler : Math.round(Math.random() * 81)
                 })
             )} else if (obj.gameStatus != "unstarted" ) {
