@@ -1,59 +1,109 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="Stylesheet" href="css.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-        <meta charset="utf-8">
+        <link rel="Stylesheet" href="css.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
+        <meta charset="utf-8" />
         <title>BrawlStars-dle</title>
-
     </head>
     <body>
-
         <header id="toph">
-            <img src="images/arrow.png" class="logobutton" draggable="false" onclick="hidemenu();" id="logoarr">
-            <img src="images/logo.png" id="top" height="7vh" draggable="false">
-            <img src="images/darkmode.png" class="logobutton" draggable="false" onclick="tdarkmode();">
+            <img
+                src="images/arrow.png"
+                class="logobutton"
+                draggable="false"
+                onclick="hidemenu();"
+                id="logoarr"
+            />
+            <img
+                src="images/logo.png"
+                id="top"
+                height="7vh"
+                draggable="false"
+            />
+            <img
+                src="images/darkmode.png"
+                class="logobutton"
+                draggable="false"
+                onclick="tdarkmode();"
+            />
         </header>
         <nav id="navmain">
-            <span class="links"><a id="linkdaily" href="daily.html" class="aNav" style="color: white">DAILY</a></span>
-            <span class="links"><a id="linknormal" href="index.html" class="aNav">NORMAL</a></span>
-            <span class="links"><a id="linkhard" href="hard.html" class="aNav">HARD</a></span>
-            <span class="links"><a id="linktimed" href="timed.html" class="aNav">TIMED</a></span>
+            <span class="links"
+                ><a
+                    id="linkdaily"
+                    href="daily.html"
+                    class="aNav"
+                    style="color: white"
+                    >DAILY</a
+                ></span
+            >
+            <span class="links"
+                ><a id="linknormal" href="index.html" class="aNav"
+                    >NORMAL</a
+                ></span
+            >
+            <span class="links"
+                ><a id="linkhard" href="hard.html" class="aNav">HARD</a></span
+            >
+            <span class="links"
+                ><a id="linktimed" href="timed.html" class="aNav"
+                    >TIMED</a
+                ></span
+            >
         </nav>
 
         <main align="center">
-            <video id="bgvideo" src="images/background.mp4" autoplay loop muted poster="images/backgroundstill.png"></video>
-            
-            <div style="padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh;" id="instructions">
-                daily brawler guessing!<br>
+            <video
+                id="bgvideo"
+                src="images/background.mp4"
+                autoplay
+                loop
+                muted
+                poster="images/backgroundstill.png"
+            ></video>
+
+            <div
+                style="
+                    padding-top: 0.7vh;
+                    padding-bottom: 0.9vh;
+                    font-size: 3vh;
+                "
+                id="instructions"
+            >
+                daily brawler guessing!<br />
                 enter your guess here:
             </div>
 
-            <input list="brawlers_list" type="text" id="input" style="margin-bottom: 2vh;">
+            <input
+                list="brawlers_list"
+                type="text"
+                id="input"
+                style="margin-bottom: 2vh"
+            />
             <button id="guessbutton">></button>
 
-            <div style="padding-bottom: 0.9vh; font-size: 3vh;" id="rem">
+            <div style="padding-bottom: 0.9vh; font-size: 3vh" id="rem">
                 guesses remaining: <span id="rem_numb">6</span>
             </div>
 
             <table id="main_table">
                 <tr>
-                    <td style="opacity:0%;" class="tdtop"></td>
+                    <td style="opacity: 0%" class="tdtop"></td>
                     <td align="center" class="tdtop">rarity</td>
                     <td align="center" class="tdtop">wallbreak</td>
                     <td align="center" class="tdtop">p11 health</td>
                     <td align="center" class="tdtop">projectiles</td>
                     <td align="center" class="tdtop">year</td>
                 </tr>
-            </table>  
-            
-            <div id="keyboardTop">
-                <div id="brawlerSuggestion">
+            </table>
 
-                </div>
-                <div id="toggleKeyboard" onclick="toggleKeyboard()">
-                    -
-                </div>
+            <div id="keyboardTop">
+                <div id="brawlerSuggestion"></div>
+                <div id="toggleKeyboard" onclick="toggleKeyboard()">-</div>
             </div>
             <div id="keyboard1">
                 <div onclick="kbPress('q')" class="keyboardKey">Q</div>
@@ -92,274 +142,420 @@
                 <div onclick="kbPress('.')" class="keyboardKey">.</div>
                 <div onclick="kbPress('-')" class="keyboardKey">-</div>
                 <div onclick="kbPress('8')" class="keyboardKey">8</div>
-                <div onclick="kbPress(' ')" class="keyboardKey" id="keyboardSpace">_</div>
-                <div onclick="kbBack()" class="keyboardKey" id="keyboardBack"><img src="images/backspace.png" style="width: 6vw; height: auto;"></div>
+                <div
+                    onclick="kbPress(' ')"
+                    class="keyboardKey"
+                    id="keyboardSpace"
+                >
+                    _
+                </div>
+                <div onclick="kbBack()" class="keyboardKey" id="keyboardBack">
+                    <img
+                        src="images/backspace.png"
+                        style="width: 6vw; height: auto"
+                    />
+                </div>
                 <div class="keyboardKey" id="keyboardGuess">></div>
             </div>
 
-            <div style="position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.3); top: 0px;" id="shadow" class="endscreen"> </div>
+            <div
+                style="
+                    position: absolute;
+                    height: 100vh;
+                    width: 100vw;
+                    background-color: rgba(0, 0, 0, 0.3);
+                    top: 0px;
+                "
+                id="shadow"
+                class="endscreen"
+            ></div>
 
-            <div style="position: absolute; left: 10vw; top: 9.3vh; width: 80vw; height: 64vh;" id="endscreen" class="endscreen">
+            <div
+                style="
+                    position: absolute;
+                    left: 10vw;
+                    top: 9.3vh;
+                    width: 80vw;
+                    height: 64vh;
+                "
+                id="endscreen"
+                class="endscreen"
+            >
                 <center>
+                    <img
+                        id="endscreen-img"
+                        src=""
+                        draggable="false"
+                        style="height: 16.6vh; width: auto; margin-top: 10px"
+                    /><br />
+                    <div id="endscreen-text">
+                        the brawler was BIBI!<br />congratulations!
+                    </div>
+                    <br />
 
-                    <img id="endscreen-img" src="" draggable="false" style="height: 16.6vh; width: auto; margin-top: 10px;"><br>
-                    <div id="endscreen-text">the brawler was BIBI!<br>congratulations!</div><br>
+                    <img id="streak-img" src="images/streakanim.gif" /><span
+                        id="streak1"
+                        >0 </span
+                    ><span id="streak2">days in a row!</span><br />
+                    <span id="streak3">best streak: </span
+                    ><span id="streak4">2</span><br /><br />
 
-                    <img id="streak-img" src="images/streakanim.gif"><span id="streak1">0 </span><span id="streak2">days in a row!</span><br>
-                    <span id="streak3">best streak: </span><span id="streak4">2</span><br><br>
+                    <button onclick="go_back()" id="play-again">
+                        <<b>GO BACK</b></button
+                    ><br /><br />
 
-                    <button onclick="go_back()" id="play-again"><<b>GO BACK</b></button><br><br>
-
-                    <a href="https://youtube.com/@Krias" target="_blank"><img src="images/youtube.png">/ @Krias</a> <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a><br>
-                    <a href="https://twitter.com/@KriasBS" target="_blank"><img src="images/twitter.png">/ @KriasBS</a>
-
+                    <a href="https://youtube.com/@Krias" target="_blank"
+                        ><img src="images/youtube.png" />/ @Krias</a
+                    >
+                    <!-- <a class="redlink" href="https://youtu.be/Q9dk4gli0yk" target="_blank">  > NEW VIDEO</a> -->
+                    <a href="https://twitter.com/@KriasBS" target="_blank"
+                        ><img src="images/twitter.png" />/ @KriasBS</a
+                    >
+                    <br />
+                    <a href="https://github.com/shougangu" target="_blank"
+                        ><img src="images/github.png" />/ shougangu</a
+                    >
                 </center>
             </div>
-
         </main>
-        <script type = "text/javascript" src="data.js"></script>
-        <script type = "text/javascript" src="functions.js"></script>
-        
-        <script>            
+        <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="functions.js"></script>
+        <script type="text/javascript" src="backend.js"></script>
+
+        <script>
             //dark mode stuff
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            var darkmode = localStorage.getItem("darkmode") || urlParams.get('dm') || "0";
+            var darkmode =
+                localStorage.getItem("darkmode") || urlParams.get("dm") || "0";
             localStorage.setItem("darkmode", darkmode);
-            if(darkmode == "1"){
+            if (darkmode == "1") {
                 darkmode = "0";
                 tdarkmode();
             }
-            
+
             //menu stuff
             if (localStorage.getItem("menuHid") == null) {
                 localStorage.setItem("menuHid", false);
-            } else if (localStorage.getItem("menuHid") == 'true'){
+            } else if (localStorage.getItem("menuHid") == "true") {
                 document.getElementById("top").style.transition = "0s";
                 document.getElementById("logoarr").style.transition = "0s";
                 document.getElementById("navmain").style.transition = "0s";
                 var x = document.getElementsByClassName("logobutton");
-                for(var i = 0; i < x.length; i++){
-                        x[i].style.transition = "0s";
-                    }
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0s";
+                }
                 x = document.getElementsByClassName("links");
-                for(var i = 0; i < x.length; i++){
+                for (var i = 0; i < x.length; i++) {
                     x[i].style.transition = "0s";
                 }
                 localStorage.setItem("menuHid", false);
                 hidemenu();
                 document.getElementById("top").style.transition = "0.5s all";
-                document.getElementById("logoarr").style.transition = "0.5s all";
-                document.getElementById("navmain").style.transition = "0.5s all";
+                document.getElementById("logoarr").style.transition =
+                    "0.5s all";
+                document.getElementById("navmain").style.transition =
+                    "0.5s all";
                 var x = document.getElementsByClassName("logobutton");
-                for(var i = 0; i < x.length; i++){
-                        x[i].style.transition = "0.5s all";
-                    }
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0.5s all";
+                }
                 x = document.getElementsByClassName("links");
-                for(var i = 0; i < x.length; i++){
+                for (var i = 0; i < x.length; i++) {
                     x[i].style.transition = "0.5s all";
                 }
             }
 
-            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.addEventListener("contextmenu", (event) =>
+                event.preventDefault()
+            );
 
             //resizing stuff
-            window.onresize = function(){checkSize();}
-            window.onload = function(){checkSize();}
+            window.onresize = function () {
+                checkSize();
+            };
+            window.onload = function () {
+                checkSize();
+            };
             checkSize();
 
             var dayNumb = Math.floor(new Date() / 8.64e7) - 19703;
             var m_brawler = dailyNum[dayNumb];
             var keyboard = true;
 
-            
             var obj = JSON.parse(localStorage.getItem("currentGame"));
             if (localStorage.getItem("currentGame") == null) {
-                localStorage.setItem("currentGame", JSON.stringify({
-                    dayNumb: dayNumb, 
-                    gameStatus: "unstarted", //status either unstarted, started, won, lost
-                    guesses: 0,
-                    gameString: "",
-                    currentWinStreak: localStorage.getItem("dWinstreak") || 0,
-                    maxWinStreak: localStorage.getItem("winsDbest") || 0
-                }
-            ));
+                localStorage.setItem(
+                    "currentGame",
+                    JSON.stringify({
+                        dayNumb: dayNumb,
+                        gameStatus: "unstarted", //status either unstarted, started, won, lost
+                        guesses: 0,
+                        gameString: "",
+                        currentWinStreak:
+                            localStorage.getItem("dWinstreak") || 0,
+                        maxWinStreak: localStorage.getItem("winsDbest") || 0,
+                    })
+                );
             } else if (obj.dayNumb != dayNumb) {
-                localStorage.setItem("currentGame", JSON.stringify({
-                    dayNumb: dayNumb, 
-                    // save the current winstreak if last game was yesterday and the last game and today are consecutive
-                    currentWinStreak: (dayNumb - obj.dayNumb == 1 && obj.gameStatus == "won") ? obj.currentWinStreak : 0,  
-                    gameStatus: "unstarted", 
-                    guesses: 0,
-                    gameString: "",    
-                    
-                    maxWinStreak: obj.maxWinStreak
-                }
-            ));
-            } else if (obj.gameStatus == "started" ) {
+                localStorage.setItem(
+                    "currentGame",
+                    JSON.stringify({
+                        dayNumb: dayNumb,
+                        // save the current winstreak if last game was yesterday and the last game and today are consecutive
+                        currentWinStreak:
+                            dayNumb - obj.dayNumb == 1 &&
+                            obj.gameStatus == "won"
+                                ? obj.currentWinStreak
+                                : 0,
+                        gameStatus: "unstarted",
+                        guesses: 0,
+                        gameString: "",
+
+                        maxWinStreak: obj.maxWinStreak,
+                    })
+                );
+            } else if (obj.gameStatus == "started") {
                 var tempobj = {
-                    dayNumb: dayNumb, 
-                    gameStatus: "unstarted", 
+                    dayNumb: dayNumb,
+                    gameStatus: "unstarted",
                     guesses: 0,
                     gameString: "",
                     currentWinStreak: obj.currentWinStreak,
-                    maxWinStreak: obj.maxWinStreak
+                    maxWinStreak: obj.maxWinStreak,
                 };
                 lastGameArray = obj.gameString.split("|");
                 for (var i = 0; i < lastGameArray.length; i++) {
                     document.getElementById("input").value = lastGameArray[i];
-                    tempobj = guess(tempobj);
-                    
+                    tempobj = guess(tempobj, true);
                 }
             } else if (obj.gameStatus == "won" || obj.gameStatus == "lost") {
                 var tempobj = {
-                    dayNumb: dayNumb, 
-                    gameStatus: "unstarted", 
+                    dayNumb: dayNumb,
+                    gameStatus: "unstarted",
                     guesses: 0,
                     gameString: "",
-                    currentWinStreak: obj.gameStatus == "won"? obj.currentWinStreak - 1: obj.currentWinStreak,
-                    maxWinStreak: obj.maxWinStreak
+                    currentWinStreak:
+                        obj.gameStatus == "won"
+                            ? obj.currentWinStreak - 1
+                            : obj.currentWinStreak,
+                    maxWinStreak: obj.maxWinStreak,
                 };
                 console.log(obj.gameString);
                 lastGameArray = obj.gameString.split("|");
                 for (var i = 0; i < lastGameArray.length; i++) {
-                    console.log(lastGameArray[i])
+                    console.log(lastGameArray[i]);
                     document.getElementById("input").value = lastGameArray[i];
-                    tempobj = guess(tempobj);
+                    tempobj = guess(tempobj, true);
                 }
             }
 
-            
-            document.addEventListener("click", function(event) {
-                if ((event.target && event.target.id ==="guessbutton") || (event.target && event.target.id ==="keyboardGuess")){
+            document.addEventListener("click", function (event) {
+                if (
+                    (event.target && event.target.id === "guessbutton") ||
+                    (event.target && event.target.id === "keyboardGuess")
+                ) {
                     var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
-                    localStorage.setItem("currentGame", JSON.stringify(obj)); 
+                    localStorage.setItem("currentGame", JSON.stringify(obj));
                 }
             });
 
-            document.addEventListener("keypress", function(event) {
+            document.addEventListener("keypress", function (event) {
                 if (event.keyCode == 13) {
                     var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
                     localStorage.setItem("currentGame", JSON.stringify(obj));
-            }});
-    
+                }
+            });
 
-            function guess(obj){
-                if (obj.gameStatus == 'won' || obj.gameStatus == 'lost') {
+            function guess(obj, repeatGuess = false) {
+                if (obj.gameStatus == "won" || obj.gameStatus == "lost") {
                     return obj;
-                };
+                }
 
-                var guess_text = document.getElementById("input").value.toLowerCase();
+                var guess_text = document
+                    .getElementById("input")
+                    .value.toLowerCase();
                 document.getElementById("input").value = "";
                 updateSuggestions();
-                guess_text = autocorrect(guess_text)
+                guess_text = autocorrect(guess_text);
 
-                var brawler_nr = 0
-                while(guess_text != brawlers[brawler_nr].name){
+                var brawler_nr = 0;
+                while (guess_text != brawlers[brawler_nr].name) {
                     brawler_nr++;
-                    if(brawler_nr == Object.keys(brawlers).length){
+                    if (brawler_nr == Object.keys(brawlers).length) {
                         return obj;
-                    }     
+                    }
                 }
 
                 var goodGuesses = 0;
-                obj.gameStatus = "started"
+                obj.gameStatus = "started";
                 obj.guesses++;
                 obj.gameString += brawlers[brawler_nr].name + "|";
 
                 var number = document.getElementById("rem_numb");
-                number.innerHTML = 6-obj.guesses;
+                number.innerHTML = 6 - obj.guesses;
 
-                if(obj.guesses > 3) number.style.color = "orange";
-                if(obj.guesses > 4) number.style.color = "red";
+                if (obj.guesses > 3) number.style.color = "orange";
+                if (obj.guesses > 4) number.style.color = "red";
 
                 var main_table = document.getElementById("main_table");
 
                 var row = main_table.insertRow(1);
 
                 var cell = row.insertCell(0);
-                cell.className = "imageCell"; cell.align = "center";
-                cell.innerHTML = "<img src='images/" + brawlers[brawler_nr].name + ".png' class='imgguess' draggable='false'>";
+                cell.className = "imageCell";
+                cell.align = "center";
+                cell.innerHTML =
+                    "<img src='images/" +
+                    brawlers[brawler_nr].name +
+                    ".png' class='imgguess' draggable='false'>";
                 animateCSS(cell, "flipInX", "0s");
 
-/*  RARITY  */  var cell = row.insertCell(1); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].rarity;
-                if(brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity)   {cell.className = "correct"; goodGuesses++;}
-                else    {cell.className = "incorrect";}
+                /*  RARITY  */ var cell = row.insertCell(1);
+                cell.align = "center";
+                cell.innerHTML = brawlers[brawler_nr].rarity;
+                if (brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity) {
+                    cell.className = "correct";
+                    goodGuesses++;
+                } else {
+                    cell.className = "incorrect";
+                }
                 animateCSS(cell, "flipInX", "0.2s");
 
                 // if rarity name too long
-                if(brawlers[brawler_nr].rarity == "Legendary" || brawlers[brawler_nr].rarity == "Chromatic")
-                cell.style = "font-size: min(3vw, 2vh)";
+                if (
+                    brawlers[brawler_nr].rarity == "Legendary" ||
+                    brawlers[brawler_nr].rarity == "Chromatic"
+                )
+                    cell.style = "font-size: min(3vw, 2vh)";
 
-/*  WALLBREAK  */ var cell = row.insertCell(2); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].wall;
-                if(brawlers[brawler_nr].wall == brawlers[m_brawler].wall)   {cell.className = "correct"; goodGuesses++;}
-                else    {cell.className = "incorrect";}
+                /*  WALLBREAK  */ var cell = row.insertCell(2);
+                cell.align = "center";
+                cell.innerHTML = brawlers[brawler_nr].wall;
+                if (brawlers[brawler_nr].wall == brawlers[m_brawler].wall) {
+                    cell.className = "correct";
+                    goodGuesses++;
+                } else {
+                    cell.className = "incorrect";
+                }
                 animateCSS(cell, "flipInX", "0.4s");
 
-/*  HEALTH  */  var cell = row.insertCell(3); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].health;
-                if(brawlers[brawler_nr].health == brawlers[m_brawler].health)   {cell.className = "correct"; goodGuesses++;}
-                else    {cell.className = "incorrect";}
+                /*  HEALTH  */ var cell = row.insertCell(3);
+                cell.align = "center";
+                cell.innerHTML = brawlers[brawler_nr].health;
+                if (brawlers[brawler_nr].health == brawlers[m_brawler].health) {
+                    cell.className = "correct";
+                    goodGuesses++;
+                } else {
+                    cell.className = "incorrect";
+                }
 
-                if(brawlers[brawler_nr].health > brawlers[m_brawler].health)   cell.style = "background-image: url(images/lower.png)";
-                if(brawlers[brawler_nr].health < brawlers[m_brawler].health)    cell.style = "background-image: url(images/higher.png)";
+                if (brawlers[brawler_nr].health > brawlers[m_brawler].health)
+                    cell.style = "background-image: url(images/lower.png)";
+                if (brawlers[brawler_nr].health < brawlers[m_brawler].health)
+                    cell.style = "background-image: url(images/higher.png)";
                 animateCSS(cell, "flipInX", "0.6s");
 
-/*  PROJECTILES  */ var cell = row.insertCell(4); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].projectiles;
-                if(brawlers[brawler_nr].projectiles == brawlers[m_brawler].projectiles)     {cell.className = "correct"; goodGuesses++;}
-                else    {cell.className = "incorrect";}
+                /*  PROJECTILES  */ var cell = row.insertCell(4);
+                cell.align = "center";
+                cell.innerHTML = brawlers[brawler_nr].projectiles;
+                if (
+                    brawlers[brawler_nr].projectiles ==
+                    brawlers[m_brawler].projectiles
+                ) {
+                    cell.className = "correct";
+                    goodGuesses++;
+                } else {
+                    cell.className = "incorrect";
+                }
 
-                if(brawlers[brawler_nr].projectiles > brawlers[m_brawler].projectiles)   cell.style = "background-image: url(images/lower.png)";
-                if(brawlers[brawler_nr].projectiles < brawlers[m_brawler].projectiles)    cell.style = "background-image: url(images/higher.png)";
+                if (
+                    brawlers[brawler_nr].projectiles >
+                    brawlers[m_brawler].projectiles
+                )
+                    cell.style = "background-image: url(images/lower.png)";
+                if (
+                    brawlers[brawler_nr].projectiles <
+                    brawlers[m_brawler].projectiles
+                )
+                    cell.style = "background-image: url(images/higher.png)";
                 animateCSS(cell, "flipInX", "0.8s");
-                
 
-/*  YEAR  */    var cell = row.insertCell(5); cell.align= "center"; cell.innerHTML = brawlers[brawler_nr].year;
-                if(brawlers[brawler_nr].year == brawlers[m_brawler].year)   {cell.className = "correct"; goodGuesses++;}
-                else    {cell.className = "incorrect"};
+                /*  YEAR  */ var cell = row.insertCell(5);
+                cell.align = "center";
+                cell.innerHTML = brawlers[brawler_nr].year;
+                if (brawlers[brawler_nr].year == brawlers[m_brawler].year) {
+                    cell.className = "correct";
+                    goodGuesses++;
+                } else {
+                    cell.className = "incorrect";
+                }
 
-                if(brawlers[brawler_nr].year > brawlers[m_brawler].year)   cell.style = "background-image: url(images/lower.png)";
-                if(brawlers[brawler_nr].year < brawlers[m_brawler].year)    cell.style = "background-image: url(images/higher.png)";
+                if (brawlers[brawler_nr].year > brawlers[m_brawler].year)
+                    cell.style = "background-image: url(images/lower.png)";
+                if (brawlers[brawler_nr].year < brawlers[m_brawler].year)
+                    cell.style = "background-image: url(images/higher.png)";
                 animateCSS(cell, "flipInX", "1s");
 
-                if(goodGuesses == 5)
-                    m_brawler =  brawler_nr;
-
+                if (goodGuesses == 5) m_brawler = brawler_nr;
 
                 //lost
-                if(obj.guesses == 6 && brawler_nr != m_brawler){
+                if (obj.guesses == 6 && brawler_nr != m_brawler) {
                     obj.currentWinStreak = 0;
                     obj.gameStatus = "lost";
                     animate_endscreen(brawlers[m_brawler].name);
-                    document.getElementById("endscreen-text").innerHTML = "the daily brawler was " + brawlers[m_brawler].name.toUpperCase() + "<br>better luck tomorrow!";
-                    document.getElementById("streak-img").style.display = "none";
+                    document.getElementById("endscreen-text").innerHTML =
+                        "the daily brawler was " +
+                        brawlers[m_brawler].name.toUpperCase() +
+                        "<br>better luck tomorrow!";
+                    document.getElementById("streak-img").style.display =
+                        "none";
                     document.getElementById("streak1").style.display = "none";
                     document.getElementById("streak2").style.display = "none";
-                    document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+                    document.getElementById("streak4").innerHTML =
+                        obj.maxWinStreak;
+                    if (!repeatGuess) {
+                        console.log("adding backend with obj.guesses", 7);
+                        const data = updateGuessCount(7);
+                    }
                 }
 
                 //won
-                if(brawler_nr == m_brawler){
+                if (brawler_nr == m_brawler) {
                     obj.currentWinStreak++;
-                    obj.maxWinStreak = Math.max(obj.maxWinStreak, obj.currentWinStreak);
+                    obj.maxWinStreak = Math.max(
+                        obj.maxWinStreak,
+                        obj.currentWinStreak
+                    );
                     obj.gameStatus = "won";
                     animate_endscreen(brawlers[m_brawler].name);
-                    document.getElementById("endscreen-text").innerHTML = "you guessed " + brawlers[m_brawler].name.toUpperCase() + " correctly<br>play again tomorrow!";
-                    document.getElementById("streak1").innerHTML = obj.currentWinStreak +" ";
-                    document.getElementById("streak4").innerHTML = obj.maxWinStreak;
+                    document.getElementById("endscreen-text").innerHTML =
+                        "you guessed " +
+                        brawlers[m_brawler].name.toUpperCase() +
+                        " correctly<br>play again tomorrow!";
+                    document.getElementById("streak1").innerHTML =
+                        obj.currentWinStreak + " ";
+                    document.getElementById("streak4").innerHTML =
+                        obj.maxWinStreak;
+                    if (!repeatGuess) {
+                        console.log(
+                            "adding backend with obj.guesses",
+                            obj.guesses
+                        );
+                        const data = updateGuessCount(obj.guesses);
+                    }
                 }
-                return obj
-                    
+                return obj;
             }
-            
-    
-            function go_back(){
+
+            async function go_back() {
                 /** 
                  Function to go back to the main page after the game is finished. Hides the shadow, endscreen and input field, and changes the instructions text.
                 */
                 var shadow = document.getElementById("shadow");
-                var endscreen =  document.getElementById("endscreen");
+                var endscreen = document.getElementById("endscreen");
                 shadow.style.display = "none";
                 endscreen.style.display = "none";
 
@@ -370,7 +566,11 @@
                 button.style.display = "none";
 
                 var new_text = document.getElementById("instructions");
-                new_text.innerHTML = "check back tomorrow<br>for another brawler!"
+                var avg = await updateGuessCount();
+                avg = average(avg.today[0]);
+                new_text.innerHTML =
+                    "check back tomorrow<br>for another brawler!<br>Average guess today: " +
+                    avg.toFixed(2);
 
                 var rem = document.getElementById("rem");
                 rem.style.display = "none";
@@ -467,7 +667,8 @@
             <option value="Draco"></option>
             <option value="Berry"></option>
             <option value="Clancy"></option>
+            <option value="Moe"></option>
+            <option value="Kenji"></option>
         </datalist>
-
     </body>
 </html>
