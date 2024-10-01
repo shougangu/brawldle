@@ -74,8 +74,8 @@ const createDayNumb = async (dayNumb) => {
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (dayNumb, guesses, guesstostring) => {
-    createDayNumb(dayNumb, insertQuery);
-    createDayNumb(dayNumb + 1, insertQuery);
+    await createDayNumb(dayNumb, insertQuery);
+    await createDayNumb(dayNumb + 1, insertQuery);
     let str = guesstostring[guesses];
     try {
         await db.none(
