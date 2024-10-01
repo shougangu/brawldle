@@ -29,7 +29,7 @@ const stringtoguess = {
     guess7: 7,
 };
 const insertQuery =
-    "INSERT INTO guesses (dayNumb, guess1, guess2, guess3, guess4, guess5, guess6, guess7) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
+    'INSERT INTO guesses ("dayNumb", guess1, guess2, guess3, guess4, guess5, guess6, guess7) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
 
 /* Database -------------------------------------------------*/
 const Host = process.env.PG_HOST;
@@ -58,7 +58,7 @@ const createDayNumb = async (dayNumb) => {
     try {
         // result is a bool, checks if the current dayNumb is stored in the database
         const result = await db.one(
-            "SELECT EXISTS(SELECT 1 FROM guesses WHERE dayNumb = $1) AS exists",
+            'SELECT EXISTS(SELECT 1 FROM guesses WHERE "dayNumb" = $1) AS exists',
             [dayNumb]
         );
         const exists = result.exists;
@@ -79,7 +79,7 @@ const incrementGuess = async (dayNumb, guesses, guesstostring) => {
     let str = guesstostring[guesses];
     try {
         await db.none(
-            `UPDATE guesses SET ${str} = ${str} + 1 WHERE dayNumb = $1`,
+            `UPDATE guesses SET ${str} = ${str} + 1 WHERE "dayNumb" = $1`,
             [dayNumb]
         );
         console.log("incrementGuess()");
@@ -91,9 +91,10 @@ const getGuesses = async (dayNumb) => {
     // there is an issue here with .one
     try {
         console.log(dayNumb);
-        const data = await db.any("SELECT * FROM guesses WHERE dayNumb = $1", [
-            dayNumb,
-        ]);
+        const data = await db.any(
+            'SELECT * FROM guesses WHERE "dayNumb" = $1',
+            [dayNumb]
+        );
         return data;
     } catch (error) {
         console.error("ERROR:", error);
