@@ -74,14 +74,15 @@ const createDayNumb = async (dayNumb) => {
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (dayNumb, guesses, guesstostring) => {
-    await createDayNumb(dayNumb, insertQuery);
-    await createDayNumb(dayNumb + 1, insertQuery);
+    // await createDayNumb(dayNumb, insertQuery);
+    // await createDayNumb(dayNumb + 1, insertQuery);
     let str = guesstostring[guesses];
     try {
-        await db.none(
-            `UPDATE guesses SET ${str} = ${str} + 1 WHERE "dayNumb" = $1`,
-            [dayNumb]
-        );
+        await db.none(`UPDATE guesses SET $1 = $2 + 1 WHERE "dayNumb" = $3`, [
+            str,
+            str,
+            dayNumb,
+        ]);
         console.log("incrementGuess()");
     } catch (error) {
         console.log("ERROR", error);
