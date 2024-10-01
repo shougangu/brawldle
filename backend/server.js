@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
 import pgPromise from "pg-promise";
+import dotenv from "dotenv";
 
 const app = express();
+const pgp = pgPromise();
+dotenv.config();
 app.use(cors());
 app.use(express.json());
 const port = 3000;
@@ -25,21 +28,17 @@ const stringtoguess = {
     guess6: 6,
     guess7: 7,
 };
+const insertQuery =
+    "INSERT INTO guesses (dayNumb, guess1, guess2, guess3, guess4, guess5, guess6, guess7) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
 
 /* Database -------------------------------------------------*/
-const pgp = pgPromise();
-//const dblocal = pgp("postgres://postgres@localhost:5431/postgres");
-const dbConfig = {
-    host: "your-database-host",
-    port: 5432,
-    database: "your-database-name",
-    user: "your-database-user",
-    password: "your-database-password",
-    ssl: {
-        rejectUnauthorized: false, // This is for development purposes only. In production, you should use a proper certificate.
-    },
-};
-const db = pgp("postgres://postgres@localhost:5431/postgres");
+const Host = process.env.PG_HOST;
+const Database = process.env.PG_DATABASE;
+const UserName = process.env.PG_USER;
+const Password = process.env.PG_PASSWORD;
+const Port = process.env.PORT;
+const connectionString = `postgres://${UserName}:${Password}@${Host}:${Port}/${Database}`;
+const db = pgp(connectionString);
 const testConnection = () => {
     db.connect()
         .then((obj) => {
@@ -51,11 +50,8 @@ const testConnection = () => {
         });
 };
 
-const insertQuery =
-    "INSERT INTO guesses (dayNumb, guess1, guess2, guess3, guess4, guess5, guess6, guess7) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
-
 // ensure that the currentDate is created in the database
-const createDayNumb = async (dayNumb, insertQuery) => {
+const createDayNumb = async (dayNumb) => {
     try {
         // result is a bool, checks if the current dayNumb is stored in the database
         const result = await db.one(
@@ -72,11 +68,11 @@ const createDayNumb = async (dayNumb, insertQuery) => {
         console.log("ERROR:", error);
     }
 };
-createDayNumb(dayNumb, insertQuery);
-createDayNumb(dayNumb + 1, insertQuery);
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (dayNumb, guesses, guesstostring) => {
+    createDayNumb(dayNumb, insertQuery);
+    createDayNumb(dayNumb + 1, insertQuery);
     let str = guesstostring[guesses];
     try {
         await db.none(
