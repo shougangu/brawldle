@@ -36,9 +36,11 @@ const Host = process.env.PG_HOST;
 const Database = process.env.PG_DATABASE;
 const UserName = process.env.PG_USER;
 const Password = process.env.PG_PASSWORD;
-const Port = process.env.PORT;
-const connectionString = `postgres://${UserName}:${Password}@${Host}:${Port}/${Database}`;
+const DBPort = process.env.PG_PORT;
+const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
+console.log("URL", connectionString);
 const db = pgp(connectionString);
+
 const testConnection = () => {
     db.connect()
         .then((obj) => {
