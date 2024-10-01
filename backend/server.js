@@ -104,8 +104,7 @@ const getGuesses = async (dayNumb) => {
 /* Routing ------------------------------------------------------*/
 
 app.get("/", (req, res) => {
-    res.send("Express server is running!");
-    res.sendStatus(500);
+    res.status(500).send("Express server is running!");
 });
 
 //We can call the fetch method from the frontend pages (html, js) to process the data on the server side (such as through the json file)
@@ -121,4 +120,3 @@ app.put("/guesscount", async (req, res) => {
 });
 
 app.listen(port);
-0;

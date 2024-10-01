@@ -14,13 +14,16 @@ const testfetch = async () => {
 // send the guess count data to server, returns the updated guess count data in lst forrmat
 const updateGuessCount = async (guesses) => {
     try {
-        const response = await fetch("http://localhost:3000/guesscount", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ guesses: guesses }), // Ensure the body is a JSON string
-        });
+        const response = await fetch(
+            "https://brawlstarsdle.onrender.com/guesscount",
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ guesses: guesses }), // Ensure the body is a JSON string
+            }
+        );
 
         if (!response.ok) {
             throw new Error("Network response was not ok");
