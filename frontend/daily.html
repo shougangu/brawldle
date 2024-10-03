@@ -549,6 +549,11 @@
                 }
                 return obj;
             }
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "1") {
+                    go_back();
+                }
+            });
 
             async function go_back() {
                 /** 
@@ -566,7 +571,7 @@
                 button.style.display = "none";
 
                 var new_text = document.getElementById("instructions");
-                var avg = await updateGuessCount();
+                var avg = await updateGuessCount(8);
                 avg = average(avg.today[0]);
                 new_text.innerHTML =
                     "check back tomorrow<br>for another brawler!<br>Average guess today: " +

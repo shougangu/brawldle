@@ -35,3 +35,6 @@ const updateGuessCount = async (guesses) => {
         throw error; // Re-throw the error to be handled by the caller
     }
 };
+
+// https://brawlstarsdle.onrender.com/guesscount
+// http://localhost:3000/guesscount
