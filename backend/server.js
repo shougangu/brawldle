@@ -80,7 +80,7 @@ const incrementGuess = async (guesses) => {
     // await createDayNumb();
     // await createDayNumb(dayNumb + 1, insertQuery);
     let str = guesstostring[guesses];
-    console.log("In incrementGuess()", str);
+    console.log("In incrementGuess()", guesses, str);
     try {
         await db.none(
             `UPDATE guesses SET ${str} = ${str} + 1 WHERE "dayNumb" = $1`,

@@ -14,6 +14,7 @@ const testfetch = async () => {
 // send the guess count data to server, returns the updated guess count data in lst forrmat
 const updateGuessCount = async (guesses) => {
     try {
+        console.log("updateGuessCOUNT INPUT", guesses);
         const response = await fetch(
             "https://brawlstarsdle.onrender.com/guesscount",
             {
