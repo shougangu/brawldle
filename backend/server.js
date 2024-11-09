@@ -9,7 +9,8 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 const port = 3000;
-const dayNumb = Math.floor(new Date() / 8.64e7) - 19703;
+const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
+
 const guesstostring = {
     1: "guess1",
     2: "guess2",
@@ -33,15 +34,16 @@ const stringtoguess = {
 const insertQuery =
     'INSERT INTO guesses ("dayNumb", guess1, guess2, guess3, guess4, guess5, guess6, guess7) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
 
-/* Database -------------------------------------------------*/
-const Host = process.env.PG_HOST;
-const Database = process.env.PG_DATABASE;
-const UserName = process.env.PG_USER;
-const Password = process.env.PG_PASSWORD;
-const DBPort = process.env.PG_PORT;
+/* Server Database -------------------------------------------------*/
+// const Host = process.env.PG_HOST;
+// const Database = process.env.PG_DATABASE;
+// const UserName = process.env.PG_USER;
+// const Password = process.env.PG_PASSWORD;
+// const DBPort = process.env.PG_PORT;
 //const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
-const connectionString = process.env.PG_URL;
-//const connectionString = "postgres://postgres@localhost:5431/postgres";
+//const connectionString = process.env.PG_URL;
+/* Local Database-----------------------------------------------------*/
+const connectionString = "postgres://postgres@localhost:5431/postgres";
 const db = pgp(connectionString);
 
 const testConnection = () => {
@@ -62,12 +64,12 @@ const createDayNumb = async () => {
         // result is a bool, checks if the current dayNumb is stored in the database
         const result = await db.one(
             'SELECT EXISTS(SELECT 1 FROM guesses WHERE "dayNumb" = $1) AS exists',
-            [dayNumb]
+            [dayNumb()]
         );
         const exists = result.exists;
 
         if (!exists) {
-            await db.none(insertQuery, [dayNumb, 0, 0, 0, 0, 0, 0, 0]);
+            await db.none(insertQuery, [dayNumb(), 0, 0, 0, 0, 0, 0, 0]);
         }
     } catch (error) {
         console.log("ERROR:", error);
@@ -76,15 +78,15 @@ const createDayNumb = async () => {
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (guesses) => {
-    console.log("In incrementGuess()");
+    await createDayNumb();
     // await createDayNumb();
     // await createDayNumb(dayNumb + 1, insertQuery);
     let str = guesstostring[guesses];
-    console.log("In incrementGuess()", guesses, str);
+    console.log("In incrementGuess()", guesses, str, dayNumb());
     try {
         await db.none(
             `UPDATE guesses SET ${str} = ${str} + 1 WHERE "dayNumb" = $1`,
-            [dayNumb]
+            [dayNumb()]
         );
         console.log("Incremnted Successfully");
     } catch (error) {
@@ -93,13 +95,13 @@ const incrementGuess = async (guesses) => {
 };
 
 // calls upon database to retrieve a specific row
-const getGuesses = async (dayNumbLocal) => {
+const getGuesses = async () => {
     // there is an issue here with .one
     try {
         console.log("In getGuesses()");
         const data = await db.any(
             'SELECT * FROM guesses WHERE "dayNumb" = $1',
-            [dayNumbLocal]
+            [dayNumb()]
         );
         return data;
     } catch (error) {
@@ -107,6 +109,7 @@ const getGuesses = async (dayNumbLocal) => {
         throw error;
     }
 };
+
 /* Routing ------------------------------------------------------*/
 
 app.get("/", (req, res) => {
@@ -121,7 +124,8 @@ app.put("/guesscount", async (req, res) => {
     }
 
     await incrementGuess(index);
-    var s = await getGuesses(dayNumb);
+    var s = await getGuesses();
+    console.log("This is what is sent to the frontend", s);
     res.json({ today: s });
 });
 

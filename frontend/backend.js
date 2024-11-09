@@ -12,19 +12,17 @@ const testfetch = async () => {
         .catch((error) => console.error("Error fetching data:", error));
 };
 // send the guess count data to server, returns the updated guess count data in lst forrmat
+// input guess ranging from 1 to 8, with 8 being a placeholder for not counting
 const updateGuessCount = async (guesses) => {
     try {
         console.log("updateGuessCOUNT INPUT", guesses);
-        const response = await fetch(
-            "https://brawlstarsdle.onrender.com/guesscount",
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ guesses: guesses }), // Ensure the body is a JSON string
-            }
-        );
+        const response = await fetch("http://localhost:3000/guesscount", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ guesses: guesses }), // Ensure the body key is a JSON string
+        });
 
         if (!response.ok) {
             throw new Error("Network response was not ok");

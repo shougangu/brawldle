@@ -280,7 +280,7 @@
             checkSize();
 
             var dayNumb = Math.floor(new Date() / 8.64e7) - 19703;
-            var m_brawler = dailyNum[dayNumb];
+            var m_brawler = dailyNum[dayNumb]; // dailyNum is essentially a random number generator with dayNumb
             var keyboard = true;
 
             var obj = JSON.parse(localStorage.getItem("currentGame"));
@@ -381,7 +381,7 @@
                 updateSuggestions();
                 guess_text = autocorrect(guess_text);
 
-                var brawler_nr = 0;
+                var brawler_nr = 0; // brawler_nr represents the id of the brawler guessed by the user
                 while (guess_text != brawlers[brawler_nr].name) {
                     brawler_nr++;
                     if (brawler_nr == Object.keys(brawlers).length) {
