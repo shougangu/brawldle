@@ -41,9 +41,9 @@ const insertQuery =
 // const Password = process.env.PG_PASSWORD;
 // const DBPort = process.env.PG_PORT;
 //const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
-//const connectionString = process.env.PG_URL;
+const connectionString = process.env.PG_URL;
 /* Local Database-----------------------------------------------------*/
-const connectionString = "postgres://postgres@localhost:5431/postgres";
+// const connectionString = "postgres://postgres@localhost:5431/postgres";
 const db = pgp(connectionString);
 
 const testConnection = () => {
