@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="Stylesheet" href="css.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
+        <meta charset="utf-8" />
+        <title>BrawlStars-dle</title>
+        <style>
+            .hidden {
+                display: none;
+            }
+            .switch-text {
+                color: white;
+                padding: 1vh;
+                font-size: 1.5vh;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <header id="toph">
+            <img
+                src="images/arrow.png"
+                class="logobutton"
+                draggable="false"
+                onclick="hidemenu();"
+                id="logoarr"
+            />
+            <img
+                src="images/logo.png"
+                id="top"
+                height="7vh"
+                draggable="false"
+            />
+            <img
+                src="images/darkmode.png"
+                class="logobutton"
+                draggable="false"
+                onclick="tdarkmode();"
+            />
+        </header>
+        <nav id="navmain">
+            <span class="links"
+                ><a
+                    id="linkdaily"
+                    href="daily.html"
+                    class="aNav"
+                    
+                    >DAILY</a
+                ></span
+            >
+            <span class="links"
+                ><a id="linknormal" href="index.html" class="aNav"
+                    >NORMAL</a
+                ></span
+            >
+            <span class="links"
+                ><a id="linkhard" href="hard.html" class="aNav">HARD</a></span
+            >
+            <span class="links"
+                ><a id="linktimed" href="timed.html" class="aNav"
+                    >TIMED</a
+                ></span
+            >
+            <span class="links"
+                ><a id="linktimed" href="login.html" class="aNav" style="color: white"
+                    >LOGIN (BETA)</a
+                ></span
+            >
+        </nav>
+
+        <main align="center">
+            <video
+                id="bgvideo"
+                src="images/background.mp4"
+                autoplay
+                loop
+                muted
+                poster="images/backgroundstill.png"
+            ></video>
+
+            <div id="loginForm" class="hidden" style= "padding: 2vh; font-size: 2vh;">
+                <div style="padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh; color:#efc502" id="instructions">
+                    Sign in (Beta)
+                </div>
+                <div style="margin-bottom: 1vh;">
+                    <label for="username">Username:</label> <br />
+                    <input type="text" id="username" name="username" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="usernameError" style="color: red; font-size: 1.5vh;"></div>
+                
+                <div style="margin-bottom: 1vh;">
+                    <label for="password">Password:</label><br />
+                    <input type="password" id="password" name="password" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="passwordError" style="color: red; font-size: 1.5vh;"></div>
+                <div>
+                    <button id = "loginreq" type="submit" style="font-size: 2vh; padding: 0.5vh 2vh; width: 10vh;">Login</button>
+                </div>
+                <div id="signedin" style="color: green; font-size: 1.5vh;"></div> 
+                <div class="switch-text" onclick="displayRegister()">Don't have an account yet?</div>
+            </div>
+
+            <div id="registerForm" class="hidden"style="padding: 2vh; font-size: 2vh;">
+                <div style=" padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh; color: #efc502" id="instructions">
+                    Register (Beta)
+                </div>
+                <div style="margin-bottom: 1vh;">
+                    <label for="regUsername">Username:</label> <br />
+                    <input type="text" id="regUsername" name="regUsername" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="regUsernameError" style="color: red; font-size: 1.5vh;"></div>
+                
+                <div style="margin-bottom: 1vh;">
+                    <label for="regEmail">Email:</label><br />
+                    <input type="email" id="regEmail" name="regEmail" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="regEmailError" style="color: red; font-size: 1.5vh;"></div>
+                
+                <div style="margin-bottom: 1vh;">
+                    <label for="regPassword">Password:</label><br />
+                    <input type="password" id="regPassword" name="regPassword" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="regPasswordError" style="color: red; font-size: 1.5vh;"></div>
+                
+                <div style="margin-bottom: 1vh;">
+                    <label for="regPassword2">Confirm Password:</label><br />
+                    <input type="password" id="regPassword2" name="regPassword2" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
+                </div>
+                <div id="regPassword2Error" style="color: red; font-size: 1.5vh;"></div>
+                
+                <div>
+                    <button id="registerreq" type="submit" style="font-size: 2vh; padding: 0.5vh 2vh; width: 12vh;">Register</button>
+                </div>
+                <div class="switch-text" onclick="displayLogin()">Don't have an account yet?</div>
+                <div id="registrationSuccess" style="color: green; font-size: 1.5vh;"></div>
+            </div>
+
+            <div id="userinformation" class = "hidden" style = "padding: 2vh; font-size: 2vh; color: efc502">
+                <div style=" padding-top: 0.7vh; padding-bottom: 0.9vh; font-size: 3vh;" id="instructions">
+                    User Information (Beta)
+                </div>
+                <div id="userinformationUsername"> Username: </div>
+                <div id="userinformationEmail">Email: </div>
+                <div id="dateofcreation">Date of creation: </div>
+                <div id="playernumber"></div>
+                <div id="message">  </div>
+                <div id="userinformationWins"></div>
+                <div id="userinformationLosses"></div>
+                <div id="userinformationWinrate"></div>
+                <button id="logout" style="font-size: 2vh; padding: 0.5vh 2vh; width: 10vh;">Logout</button>
+            </div>
+            
+
+
+            
+            <div id="keyboardTop" >
+               
+            </div>
+            <div id="keyboard1">
+                <div onclick="kbPress('q')" class="keyboardKey">Q</div>
+                <div onclick="kbPress('w')" class="keyboardKey">W</div>
+                <div onclick="kbPress('e')" class="keyboardKey">E</div>
+                <div onclick="kbPress('r')" class="keyboardKey">R</div>
+                <div onclick="kbPress('t')" class="keyboardKey">T</div>
+                <div onclick="kbPress('y')" class="keyboardKey">Y</div>
+                <div onclick="kbPress('u')" class="keyboardKey">U</div>
+                <div onclick="kbPress('i')" class="keyboardKey">I</div>
+                <div onclick="kbPress('o')" class="keyboardKey">O</div>
+                <div onclick="kbPress('p')" class="keyboardKey">P</div>
+            </div>
+            <div id="keyboard2">
+                <div onclick="kbPress('a')" class="keyboardKey">A</div>
+                <div onclick="kbPress('s')" class="keyboardKey">S</div>
+                <div onclick="kbPress('d')" class="keyboardKey">D</div>
+                <div onclick="kbPress('f')" class="keyboardKey">F</div>
+                <div onclick="kbPress('g')" class="keyboardKey">G</div>
+                <div onclick="kbPress('h')" class="keyboardKey">H</div>
+                <div onclick="kbPress('j')" class="keyboardKey">J</div>
+                <div onclick="kbPress('k')" class="keyboardKey">K</div>
+                <div onclick="kbPress('l')" class="keyboardKey">L</div>
+            </div>
+            <div id="keyboard3">
+                <div onclick="kbPress('z')" class="keyboardKey">Z</div>
+                <div onclick="kbPress('x')" class="keyboardKey">X</div>
+                <div onclick="kbPress('c')" class="keyboardKey">C</div>
+                <div onclick="kbPress('v')" class="keyboardKey">V</div>
+                <div onclick="kbPress('b')" class="keyboardKey">B</div>
+                <div onclick="kbPress('n')" class="keyboardKey">N</div>
+                <div onclick="kbPress('m')" class="keyboardKey">M</div>
+            </div>
+            <div id="keyboard4">
+                <div onclick="kbPress('&')" class="keyboardKey">&</div>
+                <div onclick="kbPress('.')" class="keyboardKey">.</div>
+                <div onclick="kbPress('-')" class="keyboardKey">-</div>
+                <div onclick="kbPress('@')" class="keyboardKey">@</div>
+                <div
+                    onclick="kbPress(' ')"
+                    class="keyboardKey"
+                    id="keyboardSpace"
+                >
+                    _
+                </div>
+                <div onclick="kbBack(shouldUpdateBrawler = false)" class="keyboardKey" id="keyboardBack">
+                    <img
+                        src="images/backspace.png"
+                        style="width: 6vw; height: auto"
+                    />
+                </div>
+                <div class="keyboardKey" id="keyboardGuess">></div>
+            </div>
+
+            <div
+                style="
+                    position: absolute;
+                    height: 100vh;
+                    width: 100vw;
+                    background-color: rgba(0, 0, 0, 0.3);
+                    top: 0px;
+                "
+                id="shadow"
+                class="endscreen"
+            ></div>
+
+            <div
+                style="
+                    position: absolute;
+                    left: 10vw;
+                    top: 9.3vh;
+                    width: 80vw;
+                    height: 64vh;
+                "
+                id="endscreen"
+                class="endscreen"
+            >
+            </div>
+        </main>
+        <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="functions.js"></script>
+        <script type="text/javascript" src="backend.js"></script>
+
+        <script>
+            
+            function displayLogin() {
+                document.getElementById("loginForm").classList.remove("hidden");
+                document.getElementById("userinformation").classList.add("hidden");
+                document.getElementById("registerForm").classList.add("hidden");
+            }
+            function displayRegister() {
+                document.getElementById("loginForm").classList.add("hidden");
+                document.getElementById("userinformation").classList.add("hidden");
+                document.getElementById("registerForm").classList.remove("hidden");
+            }
+
+            // show information based on the userinformation in local storage
+            function displayUserInformation() {
+                document.getElementById("loginForm").classList.add("hidden");
+                document.getElementById("registerForm").classList.add("hidden");
+                document.getElementById("userinformation").classList.remove("hidden");
+                const data = JSON.parse(localStorage.getItem("userinformation"));
+                document.getElementById("userinformationUsername").innerHTML = "Username: " + data.name;
+                document.getElementById("userinformationEmail").innerHTML = "Email: " + data.email;
+                const formattedDate = new Date(data.dateofcreation).toLocaleDateString();
+                document.getElementById("dateofcreation").innerHTML = "Date of creation: " + formattedDate;
+                document.getElementById("playernumber").innerHTML = " You are the " + data.id +"th player!";
+                document.getElementById("message").innerHTML = "Stay tuned for interesting updates ;)";
+            }
+
+            // return an access token while handling errors, using the refreshtoken in local storage
+            async function newAccessToken() {
+                const refreshToken = localStorage.getItem("refreshToken"); 
+                if (refreshToken != null) {
+                    const accessToken = await getAccessToken(refreshToken);
+                    if (accessToken != null) {
+                    localStorage.setItem("accessToken", accessToken);
+                    return accessToken;}
+                }
+                return null;
+            }
+
+            // checks if a user is logged in by validitng a new accessToken 
+            async function validateUser() {
+                if (localStorage.getItem("refreshToken") != null) {
+                    const accessToken = await newAccessToken();
+                    localStorage.setItem("accessToken", accessToken);
+                    const data = await userinformation(accessToken);
+                    console.log("validateUser()", data)
+                    if (data != null) {
+                        localStorage.setItem("userinformation", JSON.stringify(data));
+                        return true
+                        
+                    }
+                    else {
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+                        localStorage.removeItem("userinformation");
+                        return false;
+                        
+                    }
+                }
+            }
+            async function loadScreen() {
+                if (await validateUser()) {
+                    displayUserInformation();
+                } else {
+                    displayLogin();
+                }
+            }
+            loadScreen();
+           
+            // Call the async function to check user information
+            
+            
+
+            // Logout: remove tokens and user information from local storage, display Login
+            document.addEventListener ("click", async function (event) {
+                if (event.target && event.target.id === "logout") {
+                    await logout(await newAccessToken());
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("userinformation");
+                    displayLogin();
+                }
+            })
+
+            // Register: just display the registration is successful
+            document.addEventListener("click", async function (event) {
+                if (event.target && event.target.id === "registerreq") {
+                    const username = document.getElementById("regUsername").value;
+                    const email = document.getElementById("regEmail").value;
+                    const password = document.getElementById("regPassword").value;
+                    const password2 = document.getElementById("regPassword2").value;
+                    document.getElementById("regUsernameError").innerHTML = "";
+                    document.getElementById("regEmailError").innerHTML = "";
+                    document.getElementById("regPasswordError").innerHTML = "";
+                    document.getElementById("regPassword2Error").innerHTML = "";
+                    document.getElementById("regUsername").value = "";
+                    document.getElementById("regEmail").value = "";
+                    document.getElementById("regPassword").value = "";
+                    document.getElementById("regPassword2").value = "";
+                    const data = await register(username, email, password, password2);
+                    if (data.error != null) {
+                        
+                        if (data.error.includes("fields")) {
+                            document.getElementById("regPassword2Error").innerHTML = data.error;
+                        }
+                        else if (data.error.includes("long")) {
+                            document.getElementById("regPasswordError").innerHTML = data.error;
+                        }
+                        else if (data.error.includes("match")) {
+                            document.getElementById("regPassword2Error").innerHTML = data.error;
+                        }
+                        else if (data.error.includes("email")) {
+                            document.getElementById("regEmailError").innerHTML = data.error;
+                        }
+                        else {
+                            document.getElementById("regUsernameError").innerHTML = data.error;
+                        }
+                    } else {
+                        document.getElementById("registrationSuccess").innerHTML = "Registration successful!";
+                    }
+                }
+            })
+
+            // Login: if successful update accessToken, refreshToken and userinformation. Redirect
+            // to show user information
+            document.addEventListener("click", async function (event) {
+                if (
+                    (event.target && event.target.id === "loginreq") 
+                ) {
+                    const username = document.getElementById("username").value;
+                    const password = document.getElementById("password").value;
+                    document.getElementById("usernameError").innerHTML = "";
+                    document.getElementById("passwordError").innerHTML = "";
+                    document.getElementById("username").value = "";
+                    document.getElementById("password").value = ""; 
+                    const datalogin = await login(username, password); 
+                    
+                    if (datalogin.error != null) {
+                        if (datalogin.error.includes("password")) {
+                            document.getElementById("passwordError").innerHTML = datalogin.error;
+                        } else {
+                            document.getElementById("usernameError").innerHTML = datalogin.error;
+                    }} else {
+                        localStorage.setItem("accessToken", datalogin.accessToken);
+                        localStorage.setItem("refreshToken", datalogin.refreshToken);
+                        const userinfo = await userinformation(datalogin.accessToken);
+                        localStorage.setItem("userinformation", JSON.stringify(userinfo));
+                        displayUserInformation();
+                        
+                    } 
+                }
+            });
+
+
+            /*----------------------------------------------------------------------*/
+            //dark mode stuff
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            var darkmode =
+                localStorage.getItem("darkmode") || urlParams.get("dm") || "0";
+            localStorage.setItem("darkmode", darkmode);
+            if (darkmode == "1") {
+                darkmode = "0";
+                tdarkmode();
+            }
+
+            //menu stuff
+            if (localStorage.getItem("menuHid") == null) {
+                localStorage.setItem("menuHid", false);
+            } else if (localStorage.getItem("menuHid") == "true") {
+                document.getElementById("top").style.transition = "0s";
+                document.getElementById("logoarr").style.transition = "0s";
+                document.getElementById("navmain").style.transition = "0s";
+                var x = document.getElementsByClassName("logobutton");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0s";
+                }
+                x = document.getElementsByClassName("links");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0s";
+                }
+                localStorage.setItem("menuHid", false);
+                hidemenu();
+                document.getElementById("top").style.transition = "0.5s all";
+                document.getElementById("logoarr").style.transition =
+                    "0.5s all";
+                document.getElementById("navmain").style.transition =
+                    "0.5s all";
+                var x = document.getElementsByClassName("logobutton");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0.5s all";
+                }
+                x = document.getElementsByClassName("links");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.transition = "0.5s all";
+                }
+            }
+
+            document.addEventListener("contextmenu", (event) =>
+                event.preventDefault()
+            );
+
+            //resizing stuff
+            /*
+            window.onresize = function () {
+                checkSize();
+            };
+            window.onload = function () {
+                checkSize();
+            };
+            checkSize();
+            */
+            
+
+            
+
+        
+    </script>
+</html>

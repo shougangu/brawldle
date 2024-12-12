@@ -54,6 +54,11 @@
                     >TIMED</a
                 ></span
             >
+            <span class="links"
+                ><a id="linktimed" href="login.html" class="aNav"
+                    >LOGIN (BETA)</a
+                ></span
+            >
         </nav>
 
         <main align="center">
@@ -344,7 +349,6 @@
                 console.log(obj.gameString);
                 lastGameArray = obj.gameString.split("|");
                 for (var i = 0; i < lastGameArray.length; i++) {
-                    console.log(lastGameArray[i]);
                     document.getElementById("input").value = lastGameArray[i];
                     tempobj = guess(tempobj, true);
                 }

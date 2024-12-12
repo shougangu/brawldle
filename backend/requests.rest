@@ -1,0 +1,42 @@
+
+GET http://localhost:3000/userinformation
+// This should be what is sent to . 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJDb21iYXJldXNzIn0sImlhdCI6MTczMzgwNzA3OSwiZXhwIjoxNzMzODA3Njc5fQ.29V4L3mSxfcy2hWQYu5m3altgPcqYrFXSveKh7nK6QQ
+### 
+POST http://localhost:4000/token 
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ29tYmFyZXVzcyIsImlhdCI6MTczMjQyNDYxM30.-XwRZ6q9P9gGd_w0gRC3UeHuPnMA5871dd1DZuztNxo"
+}
+
+###
+
+
+
+###
+DELETE http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ29tYmFyZXVzcyIsImlhdCI6MTczMjQyNDYxM30.-XwRZ6q9P9gGd_w0gRC3UeHuPnMA5871dd1DZuztNxo"
+}
+###
+POST http://localhost:4000/users/login
+Content-Type: application/json
+
+{
+    "name": "Combareuss",
+    "password": "Password"
+}
+
+### 
+POST http://localhost:4000/users/register
+Content-Type: application/json
+
+{
+    "name": "Combareuss",
+    "email": "dashoug001@gmail.comm",
+    "password": "Password",
+    "password2": "Password"
+}

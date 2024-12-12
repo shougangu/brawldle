@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import pgPromise from "pg-promise";
 import dotenv from "dotenv";
-
+import jwt from "jsonwebtoken";
 const app = express();
 const pgp = pgPromise();
 dotenv.config();
@@ -43,9 +43,9 @@ const insertQuery =
 //const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
 const connectionString = process.env.PG_URL;
 /* Local Database-----------------------------------------------------*/
-// const connectionString = "postgres://postgres@localhost:5431/postgres";
+// const connectionString = "postgres://postgres@localhost:5432/postgres";
 const db = pgp(connectionString);
-
+//const users = [];
 const testConnection = () => {
     db.connect()
         .then((obj) => {
@@ -127,6 +127,51 @@ app.put("/guesscount", async (req, res) => {
     var s = await getGuesses();
     console.log("This is what is sent to the frontend", s);
     res.json({ today: s });
+});
+
+/* Authenticating a refresh token ------------------------------*/
+function authenticateToken(req, res, next) {
+    // this is a middleware function that processes the request before the route handler, specifically
+    // the function checks if the req token is valid. If it is, the function calls next() after
+    // modifying the req object to include the user osjbect
+    const authHeader = req.headers["authorization"]; // BEARER TOKEN
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token == null)
+        return res.status(401).json({ error: "authenticateToken(), No token" });
+
+    // the user argument is the decoded payload of the JWT, which includes the claims that
+    // were encoded into the token when it was created, which is {"name": }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            console.log("authenticateToken() Invalid token", err.message);
+            return res
+                .status(403)
+                .json({ error: "authenticateToken(), Invalid token" });
+        } else {
+            req.user = user;
+            console.log("function autenticateToken next: ", req.user);
+            next();
+        }
+    });
+}
+app.get("/posts", authenticateToken, (req, res) => {
+    // after passing, the filtered list of users is then sent back to the client
+    // as a json response. the middleware ensures that the user with valid auth token accesses it
+
+    res.json(req.user.name);
+    // res.json(users.filter((user) => user.name === req.user.name));
+});
+/* ------------------------------------------------------------*/
+app.get("/userinformation", authenticateToken, async (req, res) => {
+    const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
+        req.user.name,
+    ]);
+    console.log("User information sending back", user);
+    if (user == null) {
+        return res.status(400).json({ error: "User not found" });
+    }
+
+    res.json(user);
 });
 
 app.listen(port);

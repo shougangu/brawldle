@@ -180,7 +180,7 @@ function updateSuggestions() {
         ) {
             var bNameFix = '"' + brawlers[i].name + '"';
             sList.innerHTML +=
-                "<img src='" +
+                "<img src='images/" +
                 brawlers[i].name +
                 ".png' class='sBrawler' onclick='autocomplete(" +
                 bNameFix +
@@ -189,7 +189,11 @@ function updateSuggestions() {
     }
 }
 
-function kbPress(character, shouldUpdateBrawler = true) {
+function kbPress(character, shouldUpdateBrawler = true, customInput = null) {
+    if (customInput != null) {
+        customInput.value += character;
+        return null;
+    }
     var input = document.getElementById("input");
     input.value += character;
     if (shouldUpdateBrawler) {
@@ -197,8 +201,11 @@ function kbPress(character, shouldUpdateBrawler = true) {
     }
 }
 
-function kbBack(shouldUpdateBrawler = true) {
+function kbBack(shouldUpdateBrawler = true, customInput = null) {
     var input = document.getElementById("input");
+    if (customInput != null) {
+        input = customInput;
+    }
     input.value = input.value.slice(0, -1);
     if (shouldUpdateBrawler) {
         updateSuggestions();
@@ -248,15 +255,3 @@ function average(today) {
     count += today.guess7;
     return sum / count;
 }
-
-// document.addEventListener("keypress", async function (event) {
-//     if (event.key === "1") {
-//         // Your action when '0' is pressed
-//         s = await updateGuessCount(1);
-//         console.log(s);
-//         console.log(s.today);
-//         console.log(s.today[0]);
-//         console.log(s.today[0].guess1);
-//         console.log(average(s.today[0]));
-//     }
-// });
