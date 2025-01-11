@@ -373,6 +373,7 @@
                 }
             });
 
+            // obj(currentGame) ("input".value) -> (HTML DOM) (localStorage) obj(currentGame)
             function guess(obj, repeatGuess = false) {
                 if (obj.gameStatus == "won" || obj.gameStatus == "lost") {
                     return obj;
@@ -388,7 +389,7 @@
                 var brawler_nr = 0; // brawler_nr represents the id of the brawler guessed by the user
                 while (guess_text != brawlers[brawler_nr].name) {
                     brawler_nr++;
-                    if (brawler_nr == Object.keys(brawlers).length) {
+                    if (brawler_nr == Object.keys(brawlers).length + 2) {
                         return obj;
                     }
                 }
@@ -417,7 +418,8 @@
                     ".png' class='imgguess' draggable='false'>";
                 animateCSS(cell, "flipInX", "0s");
 
-                /*  RARITY  */ var cell = row.insertCell(1);
+                /*  RARITY  */
+                var cell = row.insertCell(1);
                 cell.align = "center";
                 cell.innerHTML = brawlers[brawler_nr].rarity;
                 if (brawlers[brawler_nr].rarity == brawlers[m_brawler].rarity) {
@@ -435,7 +437,8 @@
                 )
                     cell.style = "font-size: min(3vw, 2vh)";
 
-                /*  WALLBREAK  */ var cell = row.insertCell(2);
+                /*  WALLBREAK  */
+                var cell = row.insertCell(2);
                 cell.align = "center";
                 cell.innerHTML = brawlers[brawler_nr].wall;
                 if (brawlers[brawler_nr].wall == brawlers[m_brawler].wall) {

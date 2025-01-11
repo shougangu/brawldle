@@ -124,6 +124,7 @@ function animate_endscreen(brawlerName) {
     animateCSS(endscreen, "fadeInDown", "2s");
 }
 
+// HTML element, animation string, delya string, prefix string -> HTML element
 function animateCSS(element, animation, delay, prefix = "animate__") {
     new Promise((resolve, reject) => {
         const animationName = `${prefix}${animation}`;
@@ -169,6 +170,7 @@ function autocomplete(bName) {
     input.value = bName;
 }
 
+// input, brawlerSuggestion HTML elements -> brawlSuggestion
 function updateSuggestions() {
     var input = document.getElementById("input");
     var sList = document.getElementById("brawlerSuggestion");
