@@ -93,9 +93,13 @@ app.post("/users/register", async (req, res) => {
             password: hashedPassword,
             email: req.body.email,
         };
-        await db.none(
+        const newUser = await db.one(
             "INSERT INTO users(name, email, password) VALUES($1, $2, $3)",
             [user.name, user.email, user.password]
+        );
+        await db.none(
+            "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
+            [newUser.id, "{}", "{}", "{}"]
         );
         console.log(
             "/users/register: User registered",

@@ -154,6 +154,7 @@
                 <div id="userinformationLosses"></div>
                 <div id="userinformationWinrate"></div>
                 <button id="logout" style="font-size: 2vh; padding: 0.5vh 2vh; width: 10vh;">Logout</button>
+                <div id="logoutError" style="color: red; font-size: 1.5vh;"></div>
             </div>
             
 
@@ -291,9 +292,7 @@
             // handled through newAccessToken() (login.html) -> getAccessToken (backend.js) -> app.post(token)
             async function validateUser() {
                 if (localStorage.getItem("refreshToken") != null) {
-                    const accessToken = await newAccessToken();
-                    localStorage.setItem("accessToken", accessToken);
-                    const data = await userinformation(accessToken);
+                    const data = await userinformation(await newAccessToken());
                     console.log("validateUser()", data)
                     if (data != null) {
                         localStorage.setItem("userinformation", JSON.stringify(data));
@@ -325,11 +324,24 @@
             // Logout: remove tokens and user information from local storage, display Login
             document.addEventListener ("click", async function (event) {
                 if (event.target && event.target.id === "logout") {
-                    await logout(await newAccessToken());
-                    localStorage.removeItem("accessToken");
-                    localStorage.removeItem("refreshToken");
-                    localStorage.removeItem("userinformation");
-                    displayLogin();
+                    console.log(0)
+                    logout_status = await logout(await newAccessToken());
+                    if (logout_status == null) {
+                        console.log(1)
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+                        localStorage.removeItem("userinformation");
+                        await insertGameData(newAccessToken());
+                        localStorage.removeItem("currentGame");
+                        localStorage.removeItem("currentNormalGame");
+                        localStorage.removeItem("currentHardGame");
+                        displayLogin();
+                    }
+                    else {
+                        console.log(2)
+                        document.getElementById("logoutError").innerHTML = "Problem logging out";
+                    }
+                    
                 }
             })
 
@@ -368,6 +380,14 @@
                         }
                     } else {
                         document.getElementById("registrationSuccess").innerHTML = "Registration successful!";
+                        const datalogin = await login(username, password);
+                        localStorage.setItem("accessToken", datalogin.accessToken);
+                        localStorage.setItem("refreshToken", datalogin.refreshToken);
+                        const userinfo = await userinformation(datalogin.accessToken);
+                        localStorage.setItem("userinformation", JSON.stringify(userinfo));
+                        // after registering, insert the local data into the database
+                        await insertGameData(newAccessToken());
+                        displayUserInformation();
                     }
                 }
             })
@@ -386,7 +406,6 @@
                     document.getElementById("username").value = "";
                     document.getElementById("password").value = ""; 
                     const datalogin = await login(username, password); 
-                    
                     if (datalogin.error != null) {
                         if (datalogin.error.includes("password")) {
                             document.getElementById("passwordError").innerHTML = datalogin.error;
@@ -397,8 +416,20 @@
                         localStorage.setItem("refreshToken", datalogin.refreshToken);
                         const userinfo = await userinformation(datalogin.accessToken);
                         localStorage.setItem("userinformation", JSON.stringify(userinfo));
+
+                        // after logging in, insert the db into local storage
+                        const game_data = await getGameData(datalogin.accessToken);
+                        if (game_data.daily) {
+                            localStorage.setItem("currentGame", game_data.daily);
+                        }
+                        if (game_data.normal) {
+                            localStorage.setItem("currentNormalGame", game_data.normal);
+                        }
+                        if (game_data.hard) {
+                            localStorage.setItem("currentHardGame", game_data.hard);
+                        }
+                        await insertGameData(newAccessToken());
                         displayUserInformation();
-                        
                     } 
                 }
             });

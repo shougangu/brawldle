@@ -38,7 +38,7 @@ const updateGuessCount = async (guesses) => {
     }
 };
 const login = async (username, password) => {
-    // username, password -> accessToken | error
+    // username, password -> {accessToken: __} | error
     try {
         const response = await fetch(
             "https://brawlstarsdleauth.onrender.com/users/login",
@@ -62,7 +62,31 @@ const login = async (username, password) => {
         throw error;
     }
 };
-
+const logout = async (refreshToken) => {
+    // returns are never used
+    // refreshToken -> null | error
+    try {
+        const response = await fetch(
+            "https://brawlstarsdleauth.onrender.com/logout",
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${refreshToken}`,
+                },
+            }
+        );
+        if (!response.ok) {
+            console.log("Deleting user in logout error");
+            return { error: response }; // HTTP response status such as 4xx/5xx based on res.sendStatus(XXX)
+        }
+        console.log("Deleting user in logout");
+        return;
+    } catch (error) {
+        console.log("logout exception");
+        return { error: error }; // Error object
+    }
+};
 const register = async (username, email, password, password2) => {
     try {
         const response = await fetch(
@@ -153,29 +177,63 @@ const userinformation = async (accessToken) => {
     }
 };
 
-const logout = async (refreshToken) => {
-    // returns are never used
-    // refreshToken -> null | error
+const insertGameData = async (accessToken) => {
+    // handled through /insertGameData (authenticateServer middleware)
+    // accessToken, daily, normal, hard -> null | error
     try {
         const response = await fetch(
-            "https://brawlstarsdleauth.onrender.com/logout",
+            "https://brawlstarsdle.onrender.com/insertGameData",
             {
-                method: "DELETE",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${refreshToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
+                body: JSON.stringify({
+                    daily: localStorage.getItem("currentGame"),
+                    normal: localStorage.getItem("currentNormalGame"),
+                    hard: localStorage.getItem("currentHardGame"),
+                }),
             }
         );
         if (!response.ok) {
-            console.log("Deleting user in logout error");
-            return response; // HTTP response status such as 4xx/5xx based on res.sendStatus(XXX)
+            const errorData = await response.json();
+            return errorData;
         }
-        console.log("Deleting user in logout");
-        return;
+        const data = await response.json();
+        console.log("Inserted Game Data", data);
+        return data;
     } catch (error) {
-        console.log("logout exception");
+        console.log("insertGameData exception");
         throw error;
+    }
+};
+
+const getGameData = async (accessToken) => {
+    // handled through /getGameData (authenticateServer middleware)
+    // accessToken -> gameData | null
+    try {
+        const response = await fetch(
+            "https://brawlstarsdle.onrender.com/getGameData",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+        console.log("HI");
+        if (!response.ok) {
+            console.log(response);
+            return null;
+        }
+        const data = await response.json();
+        console.log("Retrieved Game Data", data);
+        return data;
+    } catch (error) {
+        console.log("getGameData exception", error);
+        return null;
     }
 };
 // https://brawlstarsdle.onrender.com/guesscount

@@ -40,3 +40,14 @@ Content-Type: application/json
     "password": "Password",
     "password2": "Password"
 }
+
+###
+POST https://brawlstarsdle.onrender.com/insertGameData
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJDb21iYXJldXNzIn0sImlhdCI6MTczMzgwNzA3OSwiZXhwIjoxNzMzODA3Njc5fQ.29V4L3mSxfcy2hWQYu5m3altgPcqYrFXSveKh7nK6QQ
+
+{
+    "daily": "Combareuss",
+    "normal": "dashoug001@gmail.comm",
+    "hard": "Password"
+}

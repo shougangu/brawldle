@@ -57,6 +57,50 @@ const testConnection = () => {
         });
 };
 
+/* Routing ------------------------------------------------------*/
+
+app.get("/", (req, res) => {
+    res.status(500).send("Express server is running!");
+});
+
+/* Authenticating a refresh token + userinformation ------------------------------*/
+function authenticateToken(req, res, next) {
+    // this is a middleware function that processes the request before the route handler, specifically
+    // the function checks if the req token is valid. If it is, the function calls next() after
+    // modifying the req object to include the user osjbect
+    const authHeader = req.headers["authorization"]; // BEARER TOKEN
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token == null)
+        return res.status(401).json({ error: "authenticateToken(), No token" });
+
+    // the user argument is the decoded payload of the JWT, which includes the claims that
+    // were encoded into the token when it was created, namely {"name": }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            console.log("authenticateToken() Invalid token", err.message);
+            return res
+                .status(403)
+                .json({ error: "authenticateToken(), Invalid token" });
+        } else {
+            req.user = user;
+            console.log("function autenticateToken next: ", req.user);
+            next();
+        }
+    });
+}
+app.get("/userinformation", authenticateToken, async (req, res) => {
+    const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
+        req.user.name,
+    ]);
+    console.log("User information sending back", user);
+    if (user == null) {
+        return res.status(400).json({ error: "User not found" });
+    }
+
+    res.json(user);
+});
+
+/* Adding guesses -------------------------------------------------*/
 // creates a row for the current day
 const createDayNumb = async () => {
     try {
@@ -75,6 +119,19 @@ const createDayNumb = async () => {
         console.log("ERROR:", error);
     }
 };
+
+//We can call the fetch method from the frontend pages (html, js) to process the data on the server side (such as through the json file)
+app.put("/guesscount", async (req, res) => {
+    const index = parseInt(req.body.guesses); // Extract index from request body
+    if (index === undefined || index < 1 || index >= 9) {
+        return res.status(400).json({ error: "Invalid index" });
+    }
+
+    await incrementGuess(index);
+    var s = await getGuesses();
+    console.log("This is what is sent to the frontend", s);
+    res.json({ today: s });
+});
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (guesses) => {
@@ -110,61 +167,45 @@ const getGuesses = async () => {
     }
 };
 
-/* Routing ------------------------------------------------------*/
-
-app.get("/", (req, res) => {
-    res.status(500).send("Express server is running!");
-});
-
-//We can call the fetch method from the frontend pages (html, js) to process the data on the server side (such as through the json file)
-app.put("/guesscount", async (req, res) => {
-    const index = parseInt(req.body.guesses); // Extract index from request body
-    if (index === undefined || index < 1 || index >= 9) {
-        return res.status(400).json({ error: "Invalid index" });
-    }
-
-    await incrementGuess(index);
-    var s = await getGuesses();
-    console.log("This is what is sent to the frontend", s);
-    res.json({ today: s });
-});
-
-/* Authenticating a refresh token ------------------------------*/
-function authenticateToken(req, res, next) {
-    // this is a middleware function that processes the request before the route handler, specifically
-    // the function checks if the req token is valid. If it is, the function calls next() after
-    // modifying the req object to include the user osjbect
-    const authHeader = req.headers["authorization"]; // BEARER TOKEN
-    const token = authHeader && authHeader.split(" ")[1];
-    if (token == null)
-        return res.status(401).json({ error: "authenticateToken(), No token" });
-
-    // the user argument is the decoded payload of the JWT, which includes the claims that
-    // were encoded into the token when it was created, namely {"name": }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-            console.log("authenticateToken() Invalid token", err.message);
-            return res
-                .status(403)
-                .json({ error: "authenticateToken(), Invalid token" });
-        } else {
-            req.user = user;
-            console.log("function autenticateToken next: ", req.user);
-            next();
-        }
-    });
-}
-/* ------------------------------------------------------------*/
-app.get("/userinformation", authenticateToken, async (req, res) => {
+/* Gamedata db  -------------------------------------------------*/
+// req must include Authorization: Bearer token, JSON({daily, normal, hard})
+// req -> DB(user_id, daily, normal, hard), JSON response
+app.post("/insertGameData", authenticateToken, async (req, res) => {
+    console.log("in /insertGameData");
+    const { daily, normal, hard } = req.body;
     const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
         req.user.name,
     ]);
-    console.log("User information sending back", user);
-    if (user == null) {
-        return res.status(400).json({ error: "User not found" });
+    user_id = user.id;
+    try {
+        await db.none(
+            "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
+            [user_id, daily, normal, hard]
+        );
+        console.log("insertGameData: Game data inserted");
+        res.json({ message: "Game data inserted" });
+    } catch (error) {
+        console.error("Error in /insertGameData route:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-
-    res.json(user);
 });
 
+app.get("/getGameData", authenticateToken, async (req, res) => {
+    console.log("in /getGameData");
+    const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
+        req.user.name,
+    ]);
+    user_id = user.id;
+    try {
+        const data = await db.one(
+            "SELECT * FROM game_data WHERE user_id = $1",
+            [user_id]
+        );
+        console.log("getGameData: Retrieved Game data", data);
+        res.json(data);
+    } catch (error) {
+        console.error("Error in /getGameData route:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 app.listen(port);
