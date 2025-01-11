@@ -419,13 +419,13 @@
 
                         // after logging in, insert the db into local storage
                         const game_data = await getGameData(datalogin.accessToken);
-                        if (game_data.daily) {
+                        if (game_data.daily != null) {
                             localStorage.setItem("currentGame", game_data.daily);
                         }
-                        if (game_data.normal) {
+                        if (game_data.normal != null) {
                             localStorage.setItem("currentNormalGame", game_data.normal);
                         }
-                        if (game_data.hard) {
+                        if (game_data.hard != null) {
                             localStorage.setItem("currentHardGame", game_data.hard);
                         }
                         await insertGameData(newAccessToken());

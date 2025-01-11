@@ -176,7 +176,7 @@ app.post("/insertGameData", authenticateToken, async (req, res) => {
     const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
         req.user.name,
     ]);
-    user_id = user.id;
+    const user_id = user.id;
     try {
         await db.none(
             "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
@@ -195,7 +195,7 @@ app.get("/getGameData", authenticateToken, async (req, res) => {
     const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
         req.user.name,
     ]);
-    user_id = user.id;
+    const user_id = user.id;
     try {
         const data = await db.one(
             "SELECT * FROM game_data WHERE user_id = $1",
