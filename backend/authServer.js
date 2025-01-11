@@ -177,8 +177,8 @@ function generateAccessToken(user) {
     });
 }
 app.post("/users/login", async (req, res) => {
-    // req should be in the form of {name, password}
-
+    // req should be in the form of {name: _ , password: _}
+    // used by the login function in backend api
     // if the user is found, then the existingUser object is in the form of
     // {id, name, email, password}
 

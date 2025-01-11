@@ -140,7 +140,7 @@ function authenticateToken(req, res, next) {
         return res.status(401).json({ error: "authenticateToken(), No token" });
 
     // the user argument is the decoded payload of the JWT, which includes the claims that
-    // were encoded into the token when it was created, which is {"name": }
+    // were encoded into the token when it was created, namely {"name": }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
             console.log("authenticateToken() Invalid token", err.message);
@@ -154,13 +154,6 @@ function authenticateToken(req, res, next) {
         }
     });
 }
-app.get("/posts", authenticateToken, (req, res) => {
-    // after passing, the filtered list of users is then sent back to the client
-    // as a json response. the middleware ensures that the user with valid auth token accesses it
-
-    res.json(req.user.name);
-    // res.json(users.filter((user) => user.name === req.user.name));
-});
 /* ------------------------------------------------------------*/
 app.get("/userinformation", authenticateToken, async (req, res) => {
     const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [

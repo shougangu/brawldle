@@ -38,6 +38,7 @@ const updateGuessCount = async (guesses) => {
     }
 };
 const login = async (username, password) => {
+    // username, password -> accessToken | error
     try {
         const response = await fetch(
             "https://brawlstarsdleauth.onrender.com/users/login",
@@ -50,7 +51,7 @@ const login = async (username, password) => {
             }
         );
         if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = await response.json(); // errorData in form {error: __}
             return errorData;
         }
         const data = await response.json();
@@ -92,6 +93,8 @@ const register = async (username, email, password, password2) => {
     }
 };
 
+// refreshToken -> accessToken | null
+// used for newAccessToken()
 const getAccessToken = async (refreshToken) => {
     try {
         const response = await fetch(
@@ -111,7 +114,7 @@ const getAccessToken = async (refreshToken) => {
         console.log("Created Access Token:", data.accessToken);
         return data.accessToken;
     } catch (error) {
-        console.log("getAccessToken exception");
+        console.log("getAccessToken exception", error);
         throw error;
     }
 };
@@ -119,6 +122,9 @@ const getAccessToken = async (refreshToken) => {
 const userinformation = async (accessToken) => {
     // this function is used to fetch the user information from the server, provided
     // that the user has a valid access Token
+    // this is used in validateUser() and login waiter
+    // handled through /userinformation (authenticateServer middleware)
+    // accessToken -> userInformation | null
     try {
         const response = await fetch(
             "https://brawlstarsdle.onrender.com/userinformation",
@@ -131,6 +137,7 @@ const userinformation = async (accessToken) => {
             }
         );
         if (!response.ok) {
+            // if the response is not ok (HTTP error), then return null lpractice
             console.log(
                 "try: Error with fetching user information, maybe wrong information",
                 response
@@ -141,12 +148,14 @@ const userinformation = async (accessToken) => {
         console.log("Retrieved User Information:", data);
         return data;
     } catch (error) {
-        console.log("userinformation exception: Error with fetching ");
-        throw error;
+        console.log("userinformation exception: Error with fetching ", error);
+        return null;
     }
 };
 
 const logout = async (refreshToken) => {
+    // returns are never used
+    // refreshToken -> null | error
     try {
         const response = await fetch(
             "https://brawlstarsdleauth.onrender.com/logout",
@@ -159,8 +168,8 @@ const logout = async (refreshToken) => {
             }
         );
         if (!response.ok) {
-            console.log("Deleting user in logout");
-            return response;
+            console.log("Deleting user in logout error");
+            return response; // HTTP response status such as 4xx/5xx based on res.sendStatus(XXX)
         }
         console.log("Deleting user in logout");
         return;
