@@ -185,7 +185,7 @@ app.post("/insertGameData", authenticateToken, async (req, res) => {
         console.log("insertGameData: Game data inserted");
         res.json({ message: "Game data inserted" });
     } catch (error) {
-        console.error("Error in /insertGameData route:", error);
+        console.error("Error in /insertGameData route:", error, user_id);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -204,7 +204,7 @@ app.get("/getGameData", authenticateToken, async (req, res) => {
         console.log("getGameData: Retrieved Game data", data);
         res.json(data);
     } catch (error) {
-        console.error("Error in /getGameData route:", error);
+        console.error("Error in /getGameData route:", error, user_id);
         res.status(500).json({ error: "Internal server error" });
     }
 });
