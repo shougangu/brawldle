@@ -99,7 +99,7 @@ app.post("/users/register", async (req, res) => {
         );
         await db.none(
             "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
-            [newUser.id, "{}", "{}", "{}"]
+            [newUser.id, {}, {}, {}]
         );
         console.log(
             "/users/register: User registered",
