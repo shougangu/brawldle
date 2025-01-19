@@ -1,5 +1,14 @@
+const production = false;
+const brawlstarsdleBaseURL = production
+    ? "https://brawlstarsdle.onrender.com"
+    : "http://localhost:3000";
+
+const brawlstarsdleauthBaseURL = production
+    ? "https://brawlstarsdleauth.onrender.com"
+    : "http://localhost:4000";
+
 const testfetch = async () => {
-    fetch("http://localhost:3000/api/data")
+    fetch(`${brawlstarsdleBaseURL}/api/data`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -16,16 +25,13 @@ const testfetch = async () => {
 const updateGuessCount = async (guesses) => {
     try {
         console.log("updateGuessCOUNT INPUT", guesses);
-        const response = await fetch(
-            "https://brawlstarsdle.onrender.com/guesscount",
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ guesses: guesses }), // Ensure the body key is a JSON string
-            }
-        );
+        const response = await fetch(`${brawlstarsdleBaseURL}/guesscount`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ guesses: guesses }), // Ensure the body key is a JSON string
+        });
 
         if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -38,10 +44,10 @@ const updateGuessCount = async (guesses) => {
     }
 };
 const login = async (username, password) => {
-    // username, password -> {accessToken: __} | error
+    // username, password -> {accessToken: __, refreshToken:} || error
     try {
         const response = await fetch(
-            "https://brawlstarsdleauth.onrender.com/users/login",
+            `${brawlstarsdleauthBaseURL}/users/login`,
             {
                 method: "POST",
                 headers: {
@@ -66,16 +72,13 @@ const logout = async (refreshToken) => {
     // returns are never used
     // refreshToken -> null | error
     try {
-        const response = await fetch(
-            "https://brawlstarsdleauth.onrender.com/logout",
-            {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${refreshToken}`,
-                },
-            }
-        );
+        const response = await fetch(`${brawlstarsdleauthBaseURL}/logout`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
         if (!response.ok) {
             console.log("Deleting user in logout error");
             return { error: response }; // HTTP response status such as 4xx/5xx based on res.sendStatus(XXX)
@@ -90,7 +93,7 @@ const logout = async (refreshToken) => {
 const register = async (username, email, password, password2) => {
     try {
         const response = await fetch(
-            "https://brawlstarsdleauth.onrender.com/users/register",
+            `${brawlstarsdleauthBaseURL}/users/register`,
             {
                 method: "POST",
                 headers: {
@@ -121,21 +124,20 @@ const register = async (username, email, password, password2) => {
 // used for newAccessToken()
 const getAccessToken = async (refreshToken) => {
     try {
-        const response = await fetch(
-            "https://brawlstarsdleauth.onrender.com/token",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ token: refreshToken }),
-            }
-        );
+        //
+        const response = await fetch(`${brawlstarsdleauthBaseURL}/token`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: refreshToken }),
+        });
         if (!response.ok) {
+            console.log("getAccessToken error", response);
             return null;
         }
         const data = await response.json();
-        console.log("Created Access Token:", data.accessToken);
+        // console.log("Created Access Token:", data.accessToken);
         return data.accessToken;
     } catch (error) {
         console.log("getAccessToken exception", error);
@@ -151,7 +153,7 @@ const userinformation = async (accessToken) => {
     // accessToken -> userInformation | null
     try {
         const response = await fetch(
-            "https://brawlstarsdle.onrender.com/userinformation",
+            `${brawlstarsdleBaseURL}/userinformation`,
             {
                 method: "GET",
                 headers: {
@@ -181,21 +183,18 @@ const insertGameData = async (accessToken) => {
     // handled through /insertGameData (authenticateServer middleware)
     // accessToken, daily, normal, hard -> null | error
     try {
-        const response = await fetch(
-            "https://brawlstarsdle.onrender.com/insertGameData",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify({
-                    daily: localStorage.getItem("currentGame"),
-                    normal: localStorage.getItem("currentNormalGame"),
-                    hard: localStorage.getItem("currentHardGame"),
-                }),
-            }
-        );
+        const response = await fetch(`${brawlstarsdleBaseURL}/insertGameData`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                daily: localStorage.getItem("currentGame"),
+                normal: localStorage.getItem("currentNormalGame"),
+                hard: localStorage.getItem("currentHardGame"),
+            }),
+        });
         if (!response.ok) {
             const errorData = await response.json();
             return errorData;
@@ -213,19 +212,15 @@ const getGameData = async (accessToken) => {
     // handled through /getGameData (authenticateServer middleware)
     // accessToken -> gameData | null
     try {
-        const response = await fetch(
-            "https://brawlstarsdle.onrender.com/getGameData",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
-        console.log("HI");
+        const response = await fetch(`${brawlstarsdleBaseURL}/getGameData`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
         if (!response.ok) {
-            console.log(response);
+            console.log("getGameData API error", response);
             return null;
         }
         const data = await response.json();

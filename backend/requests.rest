@@ -1,53 +1,30 @@
 
-GET http://localhost:3000/userinformation
-// This should be what is sent to . 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJDb21iYXJldXNzIn0sImlhdCI6MTczMzgwNzA3OSwiZXhwIjoxNzMzODA3Njc5fQ.29V4L3mSxfcy2hWQYu5m3altgPcqYrFXSveKh7nK6QQ
-### 
-POST http://localhost:4000/token 
-Content-Type: application/json
-
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ29tYmFyZXVzcyIsImlhdCI6MTczMjQyNDYxM30.-XwRZ6q9P9gGd_w0gRC3UeHuPnMA5871dd1DZuztNxo"
-}
 
 ###
-
-
-
-###
-DELETE http://localhost:4000/logout
-Content-Type: application/json
-
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ29tYmFyZXVzcyIsImlhdCI6MTczMjQyNDYxM30.-XwRZ6q9P9gGd_w0gRC3UeHuPnMA5871dd1DZuztNxo"
-}
-###
-POST http://localhost:4000/users/login
-Content-Type: application/json
-
-{
-    "name": "Combareuss",
-    "password": "Password"
-}
-
-### 
 POST http://localhost:4000/users/register
 Content-Type: application/json
 
 {
-    "name": "Combareuss",
-    "email": "dashoug001@gmail.comm",
-    "password": "Password",
-    "password2": "Password"
+    "name": "qwerty",
+    "password": "qwertyu",
+    "password2": "qwertyu",
+    "email": "qwertyu"
 }
 
 ###
-POST https://brawlstarsdle.onrender.com/insertGameData
+POST http://localhost:4000/users/login 
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJDb21iYXJldXNzIn0sImlhdCI6MTczMzgwNzA3OSwiZXhwIjoxNzMzODA3Njc5fQ.29V4L3mSxfcy2hWQYu5m3altgPcqYrFXSveKh7nK6QQ
 
 {
-    "daily": "Combareuss",
-    "normal": "dashoug001@gmail.comm",
-    "hard": "Password"
+    "name": "234567",
+    "password": "234567"
 }
+###
+GET http://localhost:3000/getGameData
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMjM0NTY3IiwiaWF0IjoxNzM3MzI2NjcwLCJleHAiOjE3MzczMjcyNzB9.5Fyp59cMzmG0-sJszmjJPWkYeFo4jUWVEwkTVIqcuV
+
+###
+GET http://localhost:3000/userinformation
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMjM0NTY3IiwiaWF0IjoxNzM3MzI0Njk2LCJleHAiOjE3MzczMjUyOTZ9.CDZjpL47XrdOh4BdmZLmTmz1bm6WEotPXv7eEmii_l8

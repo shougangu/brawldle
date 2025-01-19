@@ -275,17 +275,7 @@
             // return an access token while handling errors, using the refreshtoken in local storage
             // (localStorage refreshToken) -> ((localStorage accessToken) accessToken) | null
             // handled through getAccessToken (backend) -> app.post(token) 
-            async function newAccessToken() {
-                
-                const refreshToken = localStorage.getItem("refreshToken"); 
-                if (refreshToken != null) {
-                    const accessToken = await getAccessToken(refreshToken);
-                    if (accessToken != null ) {
-                    localStorage.setItem("accessToken", accessToken);
-                    return accessToken;}
-                }
-                return null;
-            }
+            
 
             // checks if a user is logged in by validitng a new accessToken 
             // (localStorage "refreshToken", "accessToken") -> (localStorage "userinformation")
@@ -322,23 +312,24 @@
             
 
             // Logout: remove tokens and user information from local storage, display Login
+            // Remove game_data too
             document.addEventListener ("click", async function (event) {
                 if (event.target && event.target.id === "logout") {
-                    console.log(0)
-                    logout_status = await logout(await newAccessToken());
+                    console.log("LOGGING OUT -------------------")
+                    const accessToken = await newAccessToken();
+                    logout_status = await logout(accessToken);
                     if (logout_status == null) {
-                        console.log(1)
+                        console.log("REMOVING STUFF ------------")
                         localStorage.removeItem("accessToken");
                         localStorage.removeItem("refreshToken");
                         localStorage.removeItem("userinformation");
-                        await insertGameData(newAccessToken());
+                        await insertGameData(accessToken);
                         localStorage.removeItem("currentGame");
                         localStorage.removeItem("currentNormalGame");
                         localStorage.removeItem("currentHardGame");
                         displayLogin();
                     }
                     else {
-                        console.log(2)
                         document.getElementById("logoutError").innerHTML = "Problem logging out";
                     }
                     
@@ -346,6 +337,7 @@
             })
 
             // Register: just display the registration is successful
+            // insert local game data into the db of the registration
             document.addEventListener("click", async function (event) {
                 if (event.target && event.target.id === "registerreq") {
                     const username = document.getElementById("regUsername").value;
@@ -386,7 +378,7 @@
                         const userinfo = await userinformation(datalogin.accessToken);
                         localStorage.setItem("userinformation", JSON.stringify(userinfo));
                         // after registering, insert the local data into the database
-                        await insertGameData(newAccessToken());
+                        await insertGameData(await newAccessToken());
                         displayUserInformation();
                     }
                 }
@@ -417,18 +409,23 @@
                         const userinfo = await userinformation(datalogin.accessToken);
                         localStorage.setItem("userinformation", JSON.stringify(userinfo));
 
-                        // after logging in, insert the db into local storage
+                        // after logging in, change local storage based on the database
+
                         const game_data = await getGameData(datalogin.accessToken);
+                        
                         if (game_data.daily != null) {
-                            localStorage.setItem("currentGame", game_data.daily);
-                        }
+                            console.log("Change currentGame", game_data.daily)
+                            localStorage.setItem("currentGame", JSON.stringify(game_data.daily));
+                        }  
                         if (game_data.normal != null) {
-                            localStorage.setItem("currentNormalGame", game_data.normal);
+                            console.log("Change currentNormalGame", game_data.normal)
+                            localStorage.setItem("currentNormalGame", JSON.stringify(game_data.normal));
                         }
                         if (game_data.hard != null) {
-                            localStorage.setItem("currentHardGame", game_data.hard);
+                            console.log("Change currentHardGame", game_data.hard)
+                            localStorage.setItem("currentHardGame", JSON.stringify(game_data.hard));
                         }
-                        await insertGameData(newAccessToken());
+                        await insertGameData(await newAccessToken());
                         displayUserInformation();
                     } 
                 }

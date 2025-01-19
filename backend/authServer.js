@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 const port = 4000;
 const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
-
+const production = false;
 /* Server Database -------------------------------------------------*/
 // const Host = process.env.PG_HOST;
 // const Database = process.env.PG_DATABASE;
@@ -26,9 +26,9 @@ const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
 // const Password = process.env.PG_PASSWORD;
 // const DBPort = process.env.PG_PORT;
 //const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
-const connectionString = process.env.PG_URL;
-/* Local Database-----------------------------------------------------*/
-// const connectionString = "postgres://postgres@localhost:5432/postgres";
+const connectionString = production
+    ? process.env.PG_URL
+    : "postgres://postgres@localhost:5432/postgres";
 const db = pgp(connectionString);
 // const testConnection = () => {
 //     db.connect()
@@ -42,6 +42,9 @@ const db = pgp(connectionString);
 // };
 
 /* Routing ------------------------------------------------------*/
+app.get("/", (req, res) => {
+    res.status(500).send("Express server is running!");
+});
 
 app.post("/users/register", async (req, res) => {
     try {
@@ -86,21 +89,21 @@ app.post("/users/register", async (req, res) => {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-        // the user object is then pushed to the users array (which should eventually should be a database)
-
         const user = {
             name: req.body.name,
             password: hashedPassword,
             email: req.body.email,
         };
-        const newUser = await db.one(
+        await db.none(
             "INSERT INTO users(name, email, password) VALUES($1, $2, $3)",
             [user.name, user.email, user.password]
         );
-        await db.none(
-            "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
-            [newUser.id, {}, {}, {}]
-        );
+        const user_id = await db.one("SELECT id FROM users WHERE name = $1", [
+            user.name,
+        ]);
+        await db.none("INSERT INTO game_data(user_id) VALUES($1)", [
+            user_id.id,
+        ]);
         console.log(
             "/users/register: User registered",
             user.name,

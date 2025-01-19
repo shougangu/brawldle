@@ -257,3 +257,19 @@ function average(today) {
     count += today.guess7;
     return sum / count;
 }
+
+// API WORK -------------------------------------------------
+async function newAccessToken() {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken != null) {
+        const accessToken = await getAccessToken(refreshToken);
+        if (accessToken != null) {
+            localStorage.setItem("accessToken", accessToken);
+            console.log("newAccessToken()", accessToken);
+            return accessToken;
+        }
+        return null;
+    }
+    console.log("newAccessToken() null");
+    return null;
+}

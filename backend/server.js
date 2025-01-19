@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 const port = 3000;
 const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
-
+const production = false;
 const guesstostring = {
     1: "guess1",
     2: "guess2",
@@ -40,10 +40,10 @@ const insertQuery =
 // const UserName = process.env.PG_USER;
 // const Password = process.env.PG_PASSWORD;
 // const DBPort = process.env.PG_PORT;
-//const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
-const connectionString = process.env.PG_URL;
-/* Local Database-----------------------------------------------------*/
-// const connectionString = "postgres://postgres@localhost:5432/postgres";
+// const connectionString = `postgres://${UserName}:${Password}@${Host}:${DBPort}/${Database}`;
+const connectionString = production
+    ? process.env.PG_URL
+    : "postgres://postgres@localhost:5432/postgres";
 const db = pgp(connectionString);
 //const users = [];
 const testConnection = () => {
@@ -70,8 +70,10 @@ function authenticateToken(req, res, next) {
     // modifying the req object to include the user osjbect
     const authHeader = req.headers["authorization"]; // BEARER TOKEN
     const token = authHeader && authHeader.split(" ")[1];
-    if (token == null)
+    if (token == null) {
+        console.log("authenticateToken() No token");
         return res.status(401).json({ error: "authenticateToken(), No token" });
+    }
 
     // the user argument is the decoded payload of the JWT, which includes the claims that
     // were encoded into the token when it was created, namely {"name": }
@@ -89,6 +91,7 @@ function authenticateToken(req, res, next) {
     });
 }
 app.get("/userinformation", authenticateToken, async (req, res) => {
+    // req must include the accesToken
     const user = await db.oneOrNone("SELECT * FROM users WHERE name = $1", [
         req.user.name,
     ]);
@@ -135,11 +138,12 @@ app.put("/guesscount", async (req, res) => {
 
 //calls upon database to increment the number of guesses by 1
 const incrementGuess = async (guesses) => {
+    let str = guesstostring[guesses];
+    console.log("In incrementGuess()", guesses, str, dayNumb());
     await createDayNumb();
     // await createDayNumb();
     // await createDayNumb(dayNumb + 1, insertQuery);
-    let str = guesstostring[guesses];
-    console.log("In incrementGuess()", guesses, str, dayNumb());
+
     try {
         await db.none(
             `UPDATE guesses SET ${str} = ${str} + 1 WHERE "dayNumb" = $1`,
@@ -179,7 +183,7 @@ app.post("/insertGameData", authenticateToken, async (req, res) => {
     const user_id = user.id;
     try {
         await db.none(
-            "INSERT INTO game_data(user_id, daily, normal, hard) VALUES($1, $2, $3, $4)",
+            "UPDATE game_data SET daily = $2, normal = $3, hard = $4 WHERE user_id = $1",
             [user_id, daily, normal, hard]
         );
         console.log("insertGameData: Game data inserted");

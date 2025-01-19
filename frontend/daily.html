@@ -389,7 +389,7 @@
                 var brawler_nr = 0; // brawler_nr represents the id of the brawler guessed by the user
                 while (guess_text != brawlers[brawler_nr].name) {
                     brawler_nr++;
-                    if (brawler_nr == Object.keys(brawlers).length + 2) {
+                    if (brawler_nr == Object.keys(brawlers).length) {
                         return obj;
                     }
                 }
