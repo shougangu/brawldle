@@ -58,7 +58,7 @@
             >
             <span class="links"
                 ><a id="linktimed" href="login.html" class="aNav"
-                    >LOGIN (BETA)</a
+                    >LOGIN (fixed)</a
                 ></span
             >
         </nav>
@@ -377,7 +377,7 @@
                 }
             });
 
-            document.addEventListener("keypress", function (event) {
+            document.addEventListener("keypress", async function (event) {
                 if (event.keyCode == 13) {
                     obj = JSON.parse(localStorage.getItem("currentHardGame"));
                     obj = guess(obj);
@@ -385,6 +385,7 @@
                         "currentHardGame",
                         JSON.stringify(obj)
                     );
+                    await insertGameData(await newAccessToken());
                 }
             });
 

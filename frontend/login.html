@@ -13,12 +13,14 @@
                 display: none;
             }
             .switch-text {
-                color: white;
+                color: yellow;
                 padding: 1vh;
                 font-size: 1.5vh;
                 cursor: pointer;
             }
-            
+            .switch-text:hover {
+            color: white;
+            }
 
         </style>
     </head>
@@ -69,7 +71,7 @@
             >
             <span class="links"
                 ><a id="linktimed" href="login.html" class="aNav" style="color: white"
-                    >LOGIN (BETA)</a
+                    >LOGIN (fixed)</a
                 ></span
             >
         </nav>
@@ -117,7 +119,7 @@
                 <div id="regUsernameError" style="color: red; font-size: 1.5vh;"></div>
                 
                 <div style="margin-bottom: 1vh;">
-                    <label for="regEmail">Email:</label><br />
+                    <label for="regEmail">Email:</label><span style="color: white;">*</span><br />
                     <input type="email" id="regEmail" name="regEmail" required style="font-size: 2vh; padding: 0.5vh; width: 20vh;">
                 </div>
                 <div id="regEmailError" style="color: red; font-size: 1.5vh;"></div>
@@ -137,8 +139,11 @@
                 <div>
                     <button id="registerreq" type="submit" style="font-size: 2vh; padding: 0.5vh 2vh; width: 12vh;">Register</button>
                 </div>
-                <div class="switch-text" onclick="displayLogin()">Don't have an account yet?</div>
+                <div class="switch-text" onclick="displayLogin()">Already have account?</div>
                 <div id="registrationSuccess" style="color: green; font-size: 1.5vh;"></div>
+                <div style="font-size: 1vh; color: gray; margin-top: 1vh;">
+                    * Email is required for forgotten passwords (feature in development)
+                </div>
             </div>
 
             <div id="userinformation" class = "hidden" style = "padding: 2vh; font-size: 2vh; color: efc502">
