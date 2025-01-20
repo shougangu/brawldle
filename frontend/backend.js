@@ -1,4 +1,4 @@
-const production = false;
+const production = true;
 const brawlstarsdleBaseURL = production
     ? "https://brawlstarsdle.onrender.com"
     : "http://localhost:3000";

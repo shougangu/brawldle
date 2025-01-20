@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 const port = 3000;
 const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
-const production = false;
+const production = true;
 const guesstostring = {
     1: "guess1",
     2: "guess2",

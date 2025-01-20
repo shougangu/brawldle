@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 const port = 4000;
 const dayNumb = () => Math.floor(new Date() / 8.64e7) - 19703;
-const production = false;
+const production = true;
 /* Server Database -------------------------------------------------*/
 // const Host = process.env.PG_HOST;
 // const Database = process.env.PG_DATABASE;
