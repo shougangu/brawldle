@@ -283,78 +283,94 @@
                 checkSize();
             };
             checkSize();
-
             var dayNumb = Math.floor(new Date() / 8.64e7) - 19703;
             var m_brawler = dailyNum[dayNumb]; // dailyNum is essentially a random number generator with dayNumb
             var keyboard = true;
+            async function initgame() {
+                const database = await getGameData(await newAccessToken());
+                if (database != null && database.daily != null) {
+                    localStorage.setItem(
+                        "currentGame",
+                        JSON.stringify(database.daily)
+                    );
+                    var obj = database.daily;
+                } else {
+                    var obj = JSON.parse(localStorage.getItem("currentGame"));
+                }
+                if (localStorage.getItem("currentGame") == null) {
+                    localStorage.setItem(
+                        "currentGame",
+                        JSON.stringify({
+                            dayNumb: dayNumb,
+                            gameStatus: "unstarted", //status either unstarted, started, won, lost
+                            guesses: 0,
+                            gameString: "",
+                            currentWinStreak:
+                                localStorage.getItem("dWinstreak") || 0,
+                            maxWinStreak:
+                                localStorage.getItem("winsDbest") || 0,
+                        })
+                    );
+                } else if (obj.dayNumb != dayNumb) {
+                    localStorage.setItem(
+                        "currentGame",
+                        JSON.stringify({
+                            dayNumb: dayNumb,
+                            // save the current winstreak if last game was yesterday and the last game and today are consecutive
+                            currentWinStreak:
+                                dayNumb - obj.dayNumb == 1 &&
+                                obj.gameStatus == "won"
+                                    ? obj.currentWinStreak
+                                    : 0,
+                            gameStatus: "unstarted",
+                            guesses: 0,
+                            gameString: "",
 
-            var obj = JSON.parse(localStorage.getItem("currentGame"));
-            if (localStorage.getItem("currentGame") == null) {
-                localStorage.setItem(
-                    "currentGame",
-                    JSON.stringify({
+                            maxWinStreak: obj.maxWinStreak,
+                        })
+                    );
+                } else if (obj.gameStatus == "started") {
+                    var tempobj = {
                         dayNumb: dayNumb,
-                        gameStatus: "unstarted", //status either unstarted, started, won, lost
-                        guesses: 0,
-                        gameString: "",
-                        currentWinStreak:
-                            localStorage.getItem("dWinstreak") || 0,
-                        maxWinStreak: localStorage.getItem("winsDbest") || 0,
-                    })
-                );
-            } else if (obj.dayNumb != dayNumb) {
-                localStorage.setItem(
-                    "currentGame",
-                    JSON.stringify({
-                        dayNumb: dayNumb,
-                        // save the current winstreak if last game was yesterday and the last game and today are consecutive
-                        currentWinStreak:
-                            dayNumb - obj.dayNumb == 1 &&
-                            obj.gameStatus == "won"
-                                ? obj.currentWinStreak
-                                : 0,
                         gameStatus: "unstarted",
                         guesses: 0,
                         gameString: "",
-
+                        currentWinStreak: obj.currentWinStreak,
                         maxWinStreak: obj.maxWinStreak,
-                    })
-                );
-            } else if (obj.gameStatus == "started") {
-                var tempobj = {
-                    dayNumb: dayNumb,
-                    gameStatus: "unstarted",
-                    guesses: 0,
-                    gameString: "",
-                    currentWinStreak: obj.currentWinStreak,
-                    maxWinStreak: obj.maxWinStreak,
-                };
-                lastGameArray = obj.gameString.split("|");
-                for (var i = 0; i < lastGameArray.length; i++) {
-                    document.getElementById("input").value = lastGameArray[i];
-                    tempobj = guess(tempobj, true);
-                }
-            } else if (obj.gameStatus == "won" || obj.gameStatus == "lost") {
-                var tempobj = {
-                    dayNumb: dayNumb,
-                    gameStatus: "unstarted",
-                    guesses: 0,
-                    gameString: "",
-                    currentWinStreak:
-                        obj.gameStatus == "won"
-                            ? obj.currentWinStreak - 1
-                            : obj.currentWinStreak,
-                    maxWinStreak: obj.maxWinStreak,
-                };
-                console.log(obj.gameString);
-                lastGameArray = obj.gameString.split("|");
-                for (var i = 0; i < lastGameArray.length; i++) {
-                    document.getElementById("input").value = lastGameArray[i];
-                    tempobj = guess(tempobj, true);
+                    };
+                    lastGameArray = obj.gameString.split("|");
+                    for (var i = 0; i < lastGameArray.length; i++) {
+                        document.getElementById("input").value =
+                            lastGameArray[i];
+                        tempobj = guess(tempobj, true);
+                    }
+                } else if (
+                    obj.gameStatus == "won" ||
+                    obj.gameStatus == "lost"
+                ) {
+                    var tempobj = {
+                        dayNumb: dayNumb,
+                        gameStatus: "unstarted",
+                        guesses: 0,
+                        gameString: "",
+                        currentWinStreak:
+                            obj.gameStatus == "won"
+                                ? obj.currentWinStreak - 1
+                                : obj.currentWinStreak,
+                        maxWinStreak: obj.maxWinStreak,
+                    };
+                    console.log(obj.gameString);
+                    lastGameArray = obj.gameString.split("|");
+                    for (var i = 0; i < lastGameArray.length; i++) {
+                        document.getElementById("input").value =
+                            lastGameArray[i];
+                        tempobj = guess(tempobj, true);
+                    }
                 }
             }
+            initgame();
 
-            document.addEventListener("click", function (event) {
+            document.addEventListener("click", async function (event) {
                 if (
                     (event.target && event.target.id === "guessbutton") ||
                     (event.target && event.target.id === "keyboardGuess")
@@ -362,14 +378,16 @@
                     var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
                     localStorage.setItem("currentGame", JSON.stringify(obj));
+                    await insertGameData(await newAccessToken());
                 }
             });
 
-            document.addEventListener("keypress", function (event) {
+            document.addEventListener("keypress", async function (event) {
                 if (event.keyCode == 13) {
                     var obj = JSON.parse(localStorage.getItem("currentGame"));
                     obj = guess(obj);
                     localStorage.setItem("currentGame", JSON.stringify(obj));
+                    await insertGameData(await newAccessToken());
                 }
             });
 

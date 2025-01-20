@@ -245,6 +245,7 @@
         </main>
         <script type="text/javascript" src="data.js"></script>
         <script type="text/javascript" src="functions.js"></script>
+        <script type="text/javascript" src="backend.js"></script>
         <script defer>
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -301,38 +302,55 @@
             };
             checkSize();
             var keyboard = true;
-
-            var obj = JSON.parse(localStorage.getItem("currentHardGame"));
-            if (localStorage.getItem("currentHardGame") == null) {
-                localStorage.setItem(
-                    "currentHardGame",
-                    JSON.stringify({
+            async function initgame() {
+                const database = await getGameData(await newAccessToken());
+                if (database != null && database.hard != null) {
+                    localStorage.setItem(
+                        "currentHardGame",
+                        JSON.stringify(database.hard)
+                    );
+                    var obj = database.hard;
+                } else {
+                    var obj = JSON.parse(
+                        localStorage.getItem("currentHardGame")
+                    );
+                }
+                if (localStorage.getItem("currentHardGame") == null) {
+                    localStorage.setItem(
+                        "currentHardGame",
+                        JSON.stringify({
+                            gameStatus: "unstarted",
+                            guesses: 0,
+                            gameString: "",
+                            currentWinStreak:
+                                localStorage.getItem("winsH") || 0,
+                            maxWinStreak:
+                                localStorage.getItem("winsHbest") || 0,
+                            m_brawler: Math.round(Math.random() * 81),
+                        })
+                    );
+                } else if (obj.gameStatus != "unstarted") {
+                    var tempobj = {
                         gameStatus: "unstarted",
                         guesses: 0,
                         gameString: "",
-                        currentWinStreak: localStorage.getItem("winsH") || 0,
-                        maxWinStreak: localStorage.getItem("winsHbest") || 0,
-                        m_brawler: Math.round(Math.random() * 81),
-                    })
-                );
-            } else if (obj.gameStatus != "unstarted") {
-                var tempobj = {
-                    gameStatus: "unstarted",
-                    guesses: 0,
-                    gameString: "",
-                    currentWinStreak: obj.currentWinStreak,
-                    maxWinStreak: obj.maxWinStreak,
-                    m_brawler: obj.m_brawler,
-                };
+                        currentWinStreak: obj.currentWinStreak,
+                        maxWinStreak: obj.maxWinStreak,
+                        m_brawler: obj.m_brawler,
+                    };
 
-                lastGameArray = obj.gameString.split("|");
-                for (var i = 0; i < lastGameArray.length; i++) {
-                    document.getElementById("input").value = lastGameArray[i];
-                    tempobj = guess(tempobj);
+                    lastGameArray = obj.gameString.split("|");
+                    for (var i = 0; i < lastGameArray.length; i++) {
+                        document.getElementById("input").value =
+                            lastGameArray[i];
+                        tempobj = guess(tempobj);
+                    }
                 }
+                await insertGameData(await newAccessToken());
             }
+            initgame();
 
-            document.addEventListener("click", function (event) {
+            document.addEventListener("click", async function (event) {
                 if (event.target && event.target.id === "play-again") {
                     obj = JSON.parse(localStorage.getItem("currentHardGame"));
                     obj.gameStatus = "unstarted";
@@ -343,6 +361,7 @@
                         "currentHardGame",
                         JSON.stringify(obj)
                     );
+                    await insertGameData(await newAccessToken());
                     location.reload();
                 } else if (
                     (event.target && event.target.id === "guessbutton") ||
@@ -354,6 +373,7 @@
                         "currentHardGame",
                         JSON.stringify(obj)
                     );
+                    await insertGameData(await newAccessToken());
                 }
             });
 
