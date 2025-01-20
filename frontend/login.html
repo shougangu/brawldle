@@ -329,9 +329,7 @@
                         localStorage.removeItem("refreshToken");
                         localStorage.removeItem("userinformation");
                         await insertGameData(accessToken);
-                        localStorage.removeItem("currentGame");
-                        localStorage.removeItem("currentNormalGame");
-                        localStorage.removeItem("currentHardGame");
+                        
                         displayLogin();
                     }
                     else {
