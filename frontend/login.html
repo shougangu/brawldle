@@ -292,7 +292,6 @@
                     if (data != null) {
                         localStorage.setItem("userinformation", JSON.stringify(data));
                         return true
-                        
                     }
                     else {
                         localStorage.removeItem("accessToken");
@@ -301,7 +300,7 @@
                         return false;
                         
                     }
-                }
+                } else {return false;}
             }
             async function loadScreen() {
                 if (await validateUser()) {

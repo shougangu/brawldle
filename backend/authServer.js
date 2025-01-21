@@ -213,7 +213,7 @@ app.post("/users/login", async (req, res) => {
                 [refreshToken]
             );
             //refreshTokens.push(refreshToken);
-            if (existingToken) {
+            if (!existingToken) {
                 await db.none(
                     "INSERT INTO refresh_tokens(token,user_id) VALUES($1,$2)",
                     [refreshToken, user.id]
