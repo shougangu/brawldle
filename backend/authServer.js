@@ -208,11 +208,17 @@ app.post("/users/login", async (req, res) => {
                 { name: username },
                 process.env.REFRESH_TOKEN_SECRET
             );
-            //refreshTokens.push(refreshToken);
-            await db.none(
-                "INSERT INTO refresh_tokens(token,user_id) VALUES($1,$2)",
-                [refreshToken, user.id]
+            let existingToken = await db.oneOrNone(
+                "SELECT * FROM refresh_tokens WHERE token = $1",
+                [refreshToken]
             );
+            //refreshTokens.push(refreshToken);
+            if (existingToken) {
+                await db.none(
+                    "INSERT INTO refresh_tokens(token,user_id) VALUES($1,$2)",
+                    [refreshToken, user.id]
+                );
+            }
             console.log(
                 "/users/login: Insert a new refreshtoken",
                 refreshToken
