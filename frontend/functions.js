@@ -260,12 +260,16 @@ function average(today) {
 }
 function mergeGameData(obj1, obj2, mode = "notDaily") {
     // obj1 (localStorage) obj2 (DB) - both strings -> obj_merge (string)
-    if (!obj1) {return obj2 || ""};
-    if (!obj2) {return obj1 || ""};
+    if (!obj1) {
+        return obj2 || "";
+    }
+    if (!obj2) {
+        return obj1 || "";
+    }
     obj1 = JSON.parse(obj1);
-    obj2 = JSON.parse(obj2); 
-    const obj1GuessCount = obj1.gameString.split("|").length;
-    const obj2GuessCount = obj2.gameString.split("|").length;
+    obj2 = JSON.parse(obj2);
+    const obj1GuessCount = obj1.guesses;
+    const obj2GuessCount = obj2.guesses;
 
     var merge_maxWinStreak = Math.max(obj1.maxWinStreak, obj2.maxWinStreak);
     var merge_currentWinStreak = Math.max(
@@ -273,7 +277,7 @@ function mergeGameData(obj1, obj2, mode = "notDaily") {
         obj2.currentWinStreak
     );
     // if gamemode is "daily", then take the newest dayNumb, and update the maxWinStreak;
-    if (mode == "daily") {5
+    if (mode == "daily") {
         if (obj1.dayNumb > obj2.dayNumb) {
             console.log("mergeGameData 1");
             obj1.maxWinStreak = merge_maxWinStreak;

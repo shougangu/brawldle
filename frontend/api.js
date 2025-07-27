@@ -1,4 +1,4 @@
-const production = false;
+const production = true;
 const brawlstarsdleBaseURL = production
     ? "https://brawlstarsdle.onrender.com"
     : "http://localhost:3000";
@@ -249,5 +249,3 @@ const getGameData = async (accessToken) => {
         return null;
     }
 };
-// https://brawlstarsdle.onrender.com/guesscount
-// http://localhost:3000/guesscount
