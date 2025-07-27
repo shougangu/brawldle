@@ -2,6 +2,7 @@ function tdarkmode() {
     /**
       Darkmode represents the current colour scheme (0 being white). Function is used to invert the colour scheme of the website. 
      */
+    // var darkmode = localStorage.getItem("darkmode");
     if (darkmode == "0") {
         darkmode = "1";
         console.log("darkmode on");
@@ -257,19 +258,142 @@ function average(today) {
     count += today.guess7;
     return sum / count;
 }
+function mergeGameData(obj1, obj2, mode = "notDaily") {
+    // obj1 (localStorage) obj2 (DB) - both strings -> obj_merge (string)
+    if (!obj1) {return obj2 || ""};
+    if (!obj2) {return obj1 || ""};
+    obj1 = JSON.parse(obj1);
+    obj2 = JSON.parse(obj2); 
+    const obj1GuessCount = obj1.gameString.split("|").length;
+    const obj2GuessCount = obj2.gameString.split("|").length;
+
+    var merge_maxWinStreak = Math.max(obj1.maxWinStreak, obj2.maxWinStreak);
+    var merge_currentWinStreak = Math.max(
+        obj1.currentWinStreak,
+        obj2.currentWinStreak
+    );
+    // if gamemode is "daily", then take the newest dayNumb, and update the maxWinStreak;
+    if (mode == "daily") {5
+        if (obj1.dayNumb > obj2.dayNumb) {
+            console.log("mergeGameData 1");
+            obj1.maxWinStreak = merge_maxWinStreak;
+            return JSON.stringify(obj1);
+        } else if (obj2.dayNumb > obj1.dayNumb) {
+            console.log("mergeGameData 2");
+            obj2.maxWinStreak = merge_maxWinStreak;
+            return JSON.stringify(obj2);
+        }
+        // otherwise, take the most advanced game, and update the maxWinStreak + currentWinStreak;
+    }
+    if (obj1GuessCount >= obj2GuessCount) {
+        console.log("mergeGameData 1");
+        obj1.maxWinStreak = merge_maxWinStreak;
+        obj1.currentWinStreak = merge_currentWinStreak;
+        return JSON.stringify(obj1);
+    } else {
+        console.log("mergeGameData 2");
+        obj2.maxWinStreak = merge_maxWinStreak;
+        obj2.currentWinStreak = merge_currentWinStreak;
+        return JSON.stringify(obj2);
+    }
+}
 
 // API WORK -------------------------------------------------
 async function newAccessToken() {
+    console.log("newAccessToken() function.js");
+    // Check if we already have a valid access token
+    const existingAccessToken = localStorage.getItem("accessToken");
+    const accessTokenGenerated = localStorage.getItem("accessTokenGenerated");
+
+    if (existingAccessToken && accessTokenGenerated) {
+        const tokenAge = Date.now() - parseInt(accessTokenGenerated);
+        // Access tokens expire in 10 minutes (600000 ms), check if still valid
+        if (tokenAge < 570000) {
+            console.log("newAccessToken() using old value");
+            return existingAccessToken;
+        } else {
+            console.log(
+                "newAccessToken() existing token expired, generating new one"
+            );
+        }
+    }
+
     const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken != null) {
         const accessToken = await getAccessToken(refreshToken);
         if (accessToken != null) {
             localStorage.setItem("accessToken", accessToken);
-            console.log("newAccessToken()", accessToken);
+            localStorage.setItem("accessTokenGenerated", Date.now().toString());
+            console.log(
+                "newAccessToken() returning new accessToken",
+                accessToken
+            );
             return accessToken;
         }
         return null;
     }
-    console.log("newAccessToken() null");
+    console.log("newAccessToken() : error since refreshToken is null");
     return null;
+}
+
+async function newGameData() {
+    console.log("newGameData() functions.js");
+    const gameDataGenerated = localStorage.getItem("gameDataGenerated");
+    if (
+        gameDataGenerated &&
+        Date.now() - parseInt(gameDataGenerated) < 600000
+    ) {
+        console.log("newGameData() using old value");
+        return;
+    }
+    console.log("newGameData() fetching new values");
+    let game_data = await getGameData(await newAccessToken());
+    if (!game_data) {
+        return;
+    }
+
+    // currentGame //
+    if (game_data.daily) {
+        localStorage.setItem(
+            "currentGame",
+            mergeGameData(
+                localStorage.getItem("currentGame"),
+                JSON.stringify(game_data.daily),
+                "daily"
+            )
+        );
+        console.log("Change currentGame", localStorage.getItem("currentGame"));
+    }
+
+    // currentNormalGame //
+    if (game_data.normal) {
+        localStorage.setItem(
+            "currentNormalGame",
+            mergeGameData(
+                localStorage.getItem("currentNormalGame"),
+                JSON.stringify(game_data.normal)
+            )
+        );
+        console.log(
+            "Change currentNormalGame",
+            localStorage.getItem("currentNormalGame")
+        );
+    }
+
+    // currentHardGame //
+    if (game_data.hard) {
+        localStorage.setItem(
+            "currentHardGame",
+            mergeGameData(
+                localStorage.getItem("currentHardGame"),
+                JSON.stringify(game_data.hard)
+            )
+        );
+        console.log(
+            "Change currentHardGame",
+            localStorage.getItem("currentHardGame")
+        );
+    }
+
+    localStorage.setItem("gameDataGenerated", Date.now().toString());
 }

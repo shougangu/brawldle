@@ -244,8 +244,8 @@
             </div>
         </main>
         <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="api.js"></script>
         <script type="text/javascript" src="functions.js"></script>
-        <script type="text/javascript" src="backend.js"></script>
         <script defer>
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -303,33 +303,24 @@
             checkSize();
             var keyboard = true;
             async function initgame() {
-                const database = await getGameData(await newAccessToken());
-                if (database != null && database.hard != null) {
-                    localStorage.setItem(
-                        "currentHardGame",
-                        JSON.stringify(database.hard)
-                    );
-                    var obj = database.hard;
-                } else {
-                    var obj = JSON.parse(
-                        localStorage.getItem("currentHardGame")
-                    );
+                await newGameData();
+                var obj = localStorage.getItem("currentHardGame");
+                if (!obj || obj == "undefined") {
+                    obj = JSON.stringify({
+                        gameStatus: "unstarted",
+                        guesses: 0,
+                        gameString: "",
+                        currentWinStreak: localStorage.getItem("winsH") || 0,
+                        maxWinStreak: localStorage.getItem("winsHbest") || 0,
+                        m_brawler: Math.round(Math.random() * 81),
+                    });
+                    localStorage.setItem("currentHardGame", obj);
+                    insertGameData(await newAccessToken());
+                    return;
                 }
-                if (localStorage.getItem("currentHardGame") == null) {
-                    localStorage.setItem(
-                        "currentHardGame",
-                        JSON.stringify({
-                            gameStatus: "unstarted",
-                            guesses: 0,
-                            gameString: "",
-                            currentWinStreak:
-                                localStorage.getItem("winsH") || 0,
-                            maxWinStreak:
-                                localStorage.getItem("winsHbest") || 0,
-                            m_brawler: Math.round(Math.random() * 81),
-                        })
-                    );
-                } else if (obj.gameStatus != "unstarted") {
+
+                obj = JSON.parse(obj);
+                if (obj.gameStatus != "unstarted") {
                     var tempobj = {
                         gameStatus: "unstarted",
                         guesses: 0,
@@ -346,7 +337,7 @@
                         tempobj = guess(tempobj);
                     }
                 }
-                await insertGameData(await newAccessToken());
+                insertGameData(await newAccessToken());
             }
             initgame();
 

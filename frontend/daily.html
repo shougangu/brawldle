@@ -224,8 +224,8 @@
             </div>
         </main>
         <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="api.js"></script>
         <script type="text/javascript" src="functions.js"></script>
-        <script type="text/javascript" src="backend.js"></script>
 
         <script>
             //dark mode stuff
@@ -287,31 +287,25 @@
             var m_brawler = dailyNum[dayNumb]; // dailyNum is essentially a random number generator with dayNumb
             var keyboard = true;
             async function initgame() {
-                const database = await getGameData(await newAccessToken());
-                if (database != null && database.daily != null) {
-                    localStorage.setItem(
-                        "currentGame",
-                        JSON.stringify(database.daily)
-                    );
-                    var obj = database.daily;
-                } else {
-                    var obj = JSON.parse(localStorage.getItem("currentGame"));
+                await newGameData();
+                var obj = localStorage.getItem("currentGame");
+                if (!obj || obj === "undefined") {
+                    obj = JSON.stringify({
+                        dayNumb: dayNumb,
+                        gameStatus: "unstarted", //status either unstarted, started, won, lost
+                        guesses: 0,
+                        gameString: "",
+                        currentWinStreak:
+                            localStorage.getItem("dWinstreak") || 0,
+                        maxWinStreak: localStorage.getItem("winsDbest") || 0,
+                    });
+                    localStorage.setItem("currentGame", obj);
+                    insertGameData(await newAccessToken());
+                    return;
                 }
-                if (localStorage.getItem("currentGame") == null) {
-                    localStorage.setItem(
-                        "currentGame",
-                        JSON.stringify({
-                            dayNumb: dayNumb,
-                            gameStatus: "unstarted", //status either unstarted, started, won, lost
-                            guesses: 0,
-                            gameString: "",
-                            currentWinStreak:
-                                localStorage.getItem("dWinstreak") || 0,
-                            maxWinStreak:
-                                localStorage.getItem("winsDbest") || 0,
-                        })
-                    );
-                } else if (obj.dayNumb != dayNumb) {
+
+                obj = JSON.parse(obj);
+                if (obj.dayNumb != dayNumb) {
                     localStorage.setItem(
                         "currentGame",
                         JSON.stringify({
@@ -367,6 +361,7 @@
                         tempobj = guess(tempobj, true);
                     }
                 }
+                insertGameData(await newAccessToken());
             }
             initgame();
 

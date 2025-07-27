@@ -247,8 +247,8 @@
             </div>
         </main>
         <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="api.js"></script>
         <script type="text/javascript" src="functions.js"></script>
-        <script type="text/javascript" src="backend.js"></script>
 
         <script>
             
@@ -279,13 +279,14 @@
 
             // return an access token while handling errors, using the refreshtoken in local storage
             // (localStorage refreshToken) -> ((localStorage accessToken) accessToken) | null
-            // handled through getAccessToken (backend) -> app.post(token) 
+            // handled through newAccessToken (backend) -> app.post(token) 
             
 
             // checks if a user is logged in by validitng a new accessToken 
             // (localStorage "refreshToken", "accessToken") -> (localStorage "userinformation")
-            // handled through newAccessToken() (login.html) -> getAccessToken (backend.js) -> app.post(token)
+            // handled through newAccessToken() (login.html) -> newAccessToken (functions.js |-> API) -> app.post(token)
             async function validateUser() {
+                console.log("validateUser() login.html")
                 if (localStorage.getItem("refreshToken") != null) {
                     const data = await userinformation(await newAccessToken());
                     console.log("validateUser()", data)
@@ -327,8 +328,9 @@
                         localStorage.removeItem("accessToken");
                         localStorage.removeItem("refreshToken");
                         localStorage.removeItem("userinformation");
+                        localStorage.removeItem("accessTokenGenerated")
+                        localStorage.removeItem("gameDataGenerated")
                         await insertGameData(accessToken);
-                        
                         displayLogin();
                     }
                     else {
@@ -412,21 +414,21 @@
                         localStorage.setItem("userinformation", JSON.stringify(userinfo));
 
                         // after logging in, change local storage based on the database
-
-                        const game_data = await getGameData(datalogin.accessToken);
+                        await newGameData();
+                        // const game_data = await getGameData(datalogin.accessToken);
                         
-                        if (game_data.daily != null) {
-                            console.log("Change currentGame", game_data.daily)
-                            localStorage.setItem("currentGame", JSON.stringify(game_data.daily));
-                        }  
-                        if (game_data.normal != null) {
-                            console.log("Change currentNormalGame", game_data.normal)
-                            localStorage.setItem("currentNormalGame", JSON.stringify(game_data.normal));
-                        }
-                        if (game_data.hard != null) {
-                            console.log("Change currentHardGame", game_data.hard)
-                            localStorage.setItem("currentHardGame", JSON.stringify(game_data.hard));
-                        }
+                        // if (game_data.daily != null) {
+                        //     console.log("Change currentGame", game_data.daily)
+                        //     localStorage.setItem("currentGame", mergeGameData(localStorage.getItem("currentGame"), JSON.stringify(game_data.daily), mode = "Daily"));
+                        // }  
+                        // if (game_data.normal != null) {
+                        //     console.log("Change currentNormalGame", game_data.normal)
+                        //     localStorage.setItem("currentNormalGame", mergeGameData(localStorage.getItem("currentNormalGame"), JSON.stringify(game_data.normal)));
+                        // }
+                        // if (game_data.hard != null) {
+                        //     console.log("Change currentHardGame", game_data.hard)
+                        //     localStorage.setItem("currentHardGame", mergeGameData(localStorage.getItem("currentHardGame"), JSON.stringify(game_data.hard)));
+                        // }
                         await insertGameData(await newAccessToken());
                         displayUserInformation();
                     } 
